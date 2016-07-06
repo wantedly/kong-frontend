@@ -1,0 +1,6 @@
+package: github.com/koudaiii/kong-oauth-token-generator
+import:
+- package: github.com/fabiorphp/kongo
+- package: github.com/gin-gonic/gin
+- package: github.com/kelseyhightower/envconfig
+- package: github.com/pkg/errors

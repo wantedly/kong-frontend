@@ -8,7 +8,7 @@ import (
 )
 
 type KongConfiguration struct {
-	KongAdminURL string `envconfig:"KONG_URL" default:"localhost:8001"`
+	KongAdminURL string `envconfig:"KONG_URL" default:"http://localhost:8001/"`
 }
 
 func LoadConfig() (*KongConfiguration, error) {

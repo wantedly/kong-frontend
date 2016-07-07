@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	_ "fmt"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/pkg/errors"
@@ -16,11 +16,6 @@ func LoadConfig() (*KongConfiguration, error) {
 	err := envconfig.Process("", &config)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to load config from envs.")
-	}
-	format := "KongAdminURL: %s\n"
-	_, err = fmt.Printf(format, config.KongAdminURL)
-	if err != nil {
-		return nil, err
 	}
 
 	return &config, nil

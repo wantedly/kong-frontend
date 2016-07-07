@@ -34,4 +34,4 @@ vendor/
 /gin-bin
 
 /.envrc
-kong/kong
+/kong/kong

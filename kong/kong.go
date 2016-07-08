@@ -14,20 +14,22 @@ type KongError struct {
 
 // Client is kong client
 type Client struct {
-	APIService      *APIService
-	ConsumerService *ConsumerService
-	PluginService   *PluginService
-	OAuth2Service   *OAuth2Service
+	APIService             *APIService
+	ConsumerService        *ConsumerService
+	PluginService          *PluginService
+	OAuth2ConfigService    *OAuth2ConfigService
+	AssigneesOAuth2Service *AssigneesOAuth2Service
 	// other service endpoints...
 }
 
 // NewClient returns a new Client
 func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Client {
 	return &Client{
-		APIService:      NewAPIService(httpClient, config),
-		ConsumerService: NewConsumerService(httpClient, config),
-		PluginService:   NewPluginService(httpClient, config),
-		OAuth2Service:   NewOAuth2Service(httpClient, config),
+		APIService:             NewAPIService(httpClient, config),
+		ConsumerService:        NewConsumerService(httpClient, config),
+		PluginService:          NewPluginService(httpClient, config),
+		OAuth2ConfigService:    NewOAuth2ConfigService(httpClient, config),
+		AssigneesOAuth2Service: NewAssigneesOAuth2Service(httpClient, config),
 	}
 }
 

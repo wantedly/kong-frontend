@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/koudaiii/kong-oauth-token-generator/config"
+	"github.com/koudaiii/kong-oauth-token-generator/model"
 )
 
 type RootController struct {

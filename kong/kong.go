@@ -58,4 +58,13 @@ func main() {
 
 	targetOauth2Config, _, _ := client.Oauth2Service.Get("gokun", "86e4f18c-00a6-403f-a526-5d8fc3dac95d")
 	fmt.Printf("Oauth2:\n%v\n", targetOauth2Config)
+
+	generateAPI := &API{
+		Name:             "sakabe",
+		UpstreamURL:      "http://koudaiii.com",
+		RequestHost:      "test.com",
+		StripRequestPath: true,
+	}
+	api, resp, err := client.APIService.Create(generateAPI)
+	fmt.Printf(":\n%v\n%v\n%v\n%v\n", generateAPI, api, resp, err)
 }

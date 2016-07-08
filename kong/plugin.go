@@ -48,22 +48,22 @@ func NewPluginService(httpClient *http.Client, config *config.KongConfiguration)
 	}
 }
 
-func (s *PluginService) Get(apiName string, pluginID string) (Plugin, *http.Response, error) {
+func (s *PluginService) Get(apiName string, pluginID string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
 	kongError := new(KongError)
 	resp, err := s.sling.New().Path(apiName+"/plugins/"+pluginID).Receive(plugin, kongError)
 	if err == nil {
 		err = kongError
 	}
-	return *plugin, resp, err
+	return plugin, resp, err
 }
 
-func (s *PluginService) List(apiName string) (Plugins, *http.Response, error) {
+func (s *PluginService) List(apiName string) (*Plugins, *http.Response, error) {
 	plugins := new(Plugins)
 	kongError := new(KongError)
 	resp, err := s.sling.New().Path(apiName+"/plugins/").Receive(plugins, kongError)
 	if err == nil {
 		err = kongError
 	}
-	return *plugins, resp, err
+	return plugins, resp, err
 }

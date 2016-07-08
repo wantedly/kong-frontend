@@ -131,29 +131,53 @@ func main() {
 	//	message, resp, err := client.ConsumerService.Delete(updatedConsumer.ID)
 	//	fmt.Printf("Delete Consumer : \n%v\n%v\n%v\n", message, resp, err)
 
-	// oauth2, _, _ := client.OAuth2Service.List("gokun")
+	// oauth2, _, _ := client.OAuth2ConfigService.List("gokun")
 	// fmt.Printf("OAuth2:\n%v\n", oauth2)
 
 	// targetOAuth2Config, _, _ := client.OAuth2Service.Get("gokun", "86e4f18c-00a6-403f-a526-5d8fc3dac95d")
 	// fmt.Printf("OAuth2:\n%v\n", targetOAuth2Config)
 
-	generateOAuth2Config := &OAuth2Config{
-		Name:        "sakabe site",
-		RedirectURI: "http://koudaiii.com",
+	// generateOAuth2Config := &OAuth2Config{
+	// 	Name:        "sakabe site",
+	// 	RedirectURI: "http://koudaiii.com",
+	// }
+
+	// oauth2config, resp, err := client.OAuth2ConfigService.Create(generateOAuth2Config, "gokun")
+	// fmt.Printf("Create OAuth2 :\n%v\n%v\n%v\n%v\n", generateOAuth2Config, oauth2config, resp, err)
+
+	// updateOAuth2Config := &OAuth2Config{
+	// 	ID:   oauth2config.ID,
+	// 	Name: "sakabeupdate",
+	// }
+
+	// updatedOAuth2Config, resp, err := client.OAuth2ConfigService.Update(updateOAuth2Config, "gokun")
+	// fmt.Printf("Update OAuth2Config :\n%v\n%v\n%v\n%v\n", updateOAuth2Config, updatedOAuth2Config, resp, err)
+
+	// message, resp, err := client.OAuth2ConfigService.Delete(updatedOAuth2Config.ID, "gokun")
+	// fmt.Printf("Delete OAuth2Config : \n%v\n%v\n%v\n", message, resp, err)
+
+	// assigneesOAuth2List, _, _ := client.AssigneesOAuth2Service.List()
+	// fmt.Printf("OAuth2:\n%v\n", assigneesOAuth2List)
+
+	// targetAssigneesOAuth2, _, _ := client.AssigneesOAuth2Service.Get("dd247d86-7377-48a6-8bba-7a90ae445c44")
+	// fmt.Printf("OAuth2:\n%v\n", targetAssigneesOAuth2)
+
+	generateAssigneesOAuth2 := &AssigneesOAuth2{
+		TokenType:    "bearer",
+		ExpiresIn:    0,
+		CredentialID: "cba41ce4-e965-4833-8d24-78171053cabd",
+	}
+	assigneesOAuth2, resp, err := client.AssigneesOAuth2Service.Create(generateAssigneesOAuth2)
+	fmt.Printf("Create Assignees OAuth2 :\n%v\n%v\n%v\n%v\n", generateAssigneesOAuth2, assigneesOAuth2, resp, err)
+
+	updateAssigneesOAuth2 := &AssigneesOAuth2{
+		ID:        assigneesOAuth2.ID,
+		ExpiresIn: 1000,
 	}
 
-	oauth2config, resp, err := client.OAuth2Service.Create(generateOAuth2Config, "gokun")
-	fmt.Printf("Create OAuth2 :\n%v\n%v\n%v\n%v\n", generateOAuth2Config, oauth2config, resp, err)
+	updatedAssigneesOAuth2, resp, err := client.AssigneesOAuth2Service.Update(updateAssigneesOAuth2)
+	fmt.Printf("Update Assignees OAuth2 :\n%v\n%v\n%v\n%v\n", updateAssigneesOAuth2, updatedAssigneesOAuth2, resp, err)
 
-	updateOAuth2Config := &OAuth2Config{
-		ID:   oauth2config.ID,
-		Name: "sakabeupdate",
-	}
-
-	updatedOAuth2Config, resp, err := client.OAuth2Service.Update(updateOAuth2Config, "gokun")
-	fmt.Printf("Update OAuth2Config :\n%v\n%v\n%v\n%v\n", updateOAuth2Config, updatedOAuth2Config, resp, err)
-
-	message, resp, err := client.OAuth2Service.Delete(updatedOAuth2Config.ID, "gokun")
-	fmt.Printf("Delete OAuth2Config : \n%v\n%v\n%v\n", message, resp, err)
-
+	message, resp, err := client.AssigneesOAuth2Service.Delete(updatedAssigneesOAuth2.ID)
+	fmt.Printf("Delete Assignees OAuth2 : \n%v\n%v\n%v\n", message, resp, err)
 }

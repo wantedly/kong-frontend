@@ -12,7 +12,6 @@ func main() {
 	printVersion()
 
 	config, err := config.LoadConfig()
-
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%+v\n", err)
 		os.Exit(1)

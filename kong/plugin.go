@@ -34,6 +34,10 @@ type PluginConfig struct {
 	TokenExpiration               int    `json:"token_expiration,omitempty"`
 }
 
+type EnabledPlugin struct {
+	EnabledPlugins []string `json:"enabled_plugins"`
+}
+
 // Services
 
 // PluginService provides methods for creating and reading issues.
@@ -46,6 +50,16 @@ func NewPluginService(httpClient *http.Client, config *config.KongConfiguration)
 	return &PluginService{
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
 	}
+}
+
+func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, error) {
+	plugins := new(EnabledPlugin)
+	kongError := new(KongError)
+	resp, err := s.sling.New().Get("http://localhost:8001/plugins/enabled").Receive(plugins, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return plugins, resp, err
 }
 
 func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {

@@ -15,13 +15,14 @@ type APIs struct {
 }
 
 type API struct {
-	CreatedAt        int    `json:"created_at"`
-	ID               string `json:"id"`
+	CreatedAt        int    `json:"created_at,omitempty"`
+	ID               string `json:"id,omitempty"`
 	Name             string `json:"name"`
-	PreserveHost     bool   `json:"preserve_host"`
-	RequestPath      string `json:"request_path"`
-	StripRequestPath bool   `json:"strip_request_path"`
-	UpstreamURL      string `json:"upstream_url"`
+	PreserveHost     bool   `json:"preserve_host,omitempty"`
+	RequestPath      string `json:"request_path,omitempty"`
+	StripRequestPath bool   `json:"strip_request_path,omitempty"`
+	UpstreamURL      string `json:"upstream_url,omitempty"`
+	RequestHost      string `json:"request_host,omitempty"`
 }
 
 // Services

@@ -77,3 +77,23 @@ func (s *PluginService) List(apiName string) (*Plugins, *http.Response, error) {
 	}
 	return plugins, resp, err
 }
+
+func (s *PluginService) Update(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
+	api := new(Plugin)
+	kongError := new(KongError)
+	resp, err := s.sling.New().Patch("http://localhost:8001/apis/"+apiName+"/plugins/"+params.ID).BodyJSON(params).Receive(api, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return api, resp, err
+}
+
+func (s *PluginService) Delete(pluginID string, apiName string) (string, *http.Response, error) {
+	var message string
+	kongError := new(KongError)
+	resp, err := s.sling.New().Delete("http://localhost:8001/apis/"+apiName+"/plugins/"+pluginID).Receive(message, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return message, resp, err
+}

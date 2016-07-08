@@ -14,9 +14,9 @@ type Consumers struct {
 }
 
 type Consumer struct {
-	CreatedAt int    `json:"created_at"`
-	ID        string `json:"id"`
-	Username  string `json:"username"`
+	CreatedAt int    `json:"created_at,omitempty"`
+	ID        string `json:"id,omitempty"`
+	Username  string `json:"username,omitempty"`
 }
 
 // Services

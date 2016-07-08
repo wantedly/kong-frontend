@@ -11,7 +11,9 @@ func Run(config *config.KongConfiguration) {
 	r.Static("/assets", "assets")
 	r.LoadHTMLGlob("templates/*")
 
-	r.GET("/", controller.Index)
+	rootController := controller.NewRootController(config)
+
+	r.GET("/", rootController.Index)
 
 	r.Run()
 }

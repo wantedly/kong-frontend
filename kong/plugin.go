@@ -48,7 +48,17 @@ func NewPluginService(httpClient *http.Client, config *config.KongConfiguration)
 	}
 }
 
-func (s *PluginService) Get(apiName string, pluginID string) (*Plugin, *http.Response, error) {
+func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
+	plugin := new(Plugin)
+	kongError := new(KongError)
+	resp, err := s.sling.New().Post("http://localhost:8001/apis/"+apiName+"/plugins").BodyJSON(params).Receive(plugin, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return plugin, resp, err
+}
+
+func (s *PluginService) Get(pluginID string, apiName string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
 	kongError := new(KongError)
 	resp, err := s.sling.New().Path(apiName+"/plugins/"+pluginID).Receive(plugin, kongError)

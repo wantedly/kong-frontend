@@ -3,7 +3,6 @@ package main
 import (
 	_ "fmt"
 	"net/http"
-	"os"
 
 	"github.com/dghubble/sling"
 	"github.com/koudaiii/kong-oauth-token-generator/config"
@@ -33,11 +32,7 @@ type APIService struct {
 }
 
 // NewAPIService returns a new APIService.
-func NewAPIService(httpClient *http.Client) *APIService {
-	config, err := config.LoadConfig()
-	if err != nil {
-		os.Exit(1)
-	}
+func NewAPIService(httpClient *http.Client, config *config.KongConfiguration) *APIService {
 	return &APIService{
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	_ "fmt"
 	"net/http"
-	"os"
 
 	"github.com/dghubble/sling"
 	"github.com/koudaiii/kong-oauth-token-generator/config"
@@ -28,11 +27,7 @@ type ConsumerService struct {
 }
 
 // NewConsumerService returns a new ConsumerService.
-func NewConsumerService(httpClient *http.Client) *ConsumerService {
-	config, err := config.LoadConfig()
-	if err != nil {
-		os.Exit(1)
-	}
+func NewConsumerService(httpClient *http.Client, config *config.KongConfiguration) *ConsumerService {
 	return &ConsumerService{
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
 	}

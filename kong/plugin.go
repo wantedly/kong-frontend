@@ -3,7 +3,6 @@ package main
 import (
 	_ "fmt"
 	"net/http"
-	"os"
 
 	"github.com/dghubble/sling"
 	"github.com/koudaiii/kong-oauth-token-generator/config"
@@ -43,11 +42,7 @@ type PluginService struct {
 }
 
 // NewPluginService returns a new PluginService.
-func NewPluginService(httpClient *http.Client) *PluginService {
-	config, err := config.LoadConfig()
-	if err != nil {
-		os.Exit(1)
-	}
+func NewPluginService(httpClient *http.Client, config *config.KongConfiguration) *PluginService {
 	return &PluginService{
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
 	}

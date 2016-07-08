@@ -3,7 +3,6 @@ package main
 import (
 	_ "fmt"
 	"net/http"
-	"os"
 
 	"github.com/dghubble/sling"
 	"github.com/koudaiii/kong-oauth-token-generator/config"
@@ -32,11 +31,7 @@ type Oauth2Service struct {
 }
 
 // NewCOauth2Service returns a new Oauth2Service.
-func NewOauth2Service(httpClient *http.Client) *Oauth2Service {
-	config, err := config.LoadConfig()
-	if err != nil {
-		os.Exit(1)
-	}
+func NewOauth2Service(httpClient *http.Client, config *config.KongConfiguration) *Oauth2Service {
 	return &Oauth2Service{
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
 	}

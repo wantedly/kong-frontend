@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
+
+	"github.com/koudaiii/kong-oauth-token-generator/config"
 )
 
 type KongError struct {
@@ -19,12 +22,12 @@ type Client struct {
 }
 
 // NewClient returns a new Client
-func NewClient(httpClient *http.Client) *Client {
+func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Client {
 	return &Client{
-		APIService:      NewAPIService(httpClient),
-		ConsumerService: NewConsumerService(httpClient),
-		PluginService:   NewPluginService(httpClient),
-		Oauth2Service:   NewOauth2Service(httpClient),
+		APIService:      NewAPIService(httpClient, config),
+		ConsumerService: NewConsumerService(httpClient, config),
+		PluginService:   NewPluginService(httpClient, config),
+		Oauth2Service:   NewOauth2Service(httpClient, config),
 	}
 }
 
@@ -33,7 +36,13 @@ func (e KongError) Error() string {
 }
 
 func main() {
-	client := NewClient(nil)
+	config, err := config.LoadConfig()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%+v\n", err)
+		os.Exit(1)
+	}
+
+	client := NewClient(nil, config)
 
 	apis, _, _ := client.APIService.List()
 	fmt.Printf("APIs:\n%v\n", apis)

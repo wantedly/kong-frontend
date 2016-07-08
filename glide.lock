@@ -1,5 +1,5 @@
 hash: 52e8232dde5bbe59da489ae8cf29fcebeb92259a1b46a8ccc5b044e10ceb9488
-updated: 2016-07-08T20:01:33.597494185+09:00
+updated: 2016-07-08T20:34:31.871161998+09:00
 imports:
 - name: github.com/dghubble/sling
   version: ba72285c8c5d35267ec7f48b7fc169937b0e9c56

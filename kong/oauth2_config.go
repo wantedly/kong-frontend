@@ -8,7 +8,7 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/config"
 )
 
-type OAuth2List struct {
+type OAuth2ConfigList struct {
 	OAuth2Config []OAuth2Config `json:"data,omitempty"`
 	Total        int            `json:"total,omitempty"`
 }
@@ -26,18 +26,18 @@ type OAuth2Config struct {
 // Services
 
 // ConfigService provides methods for creating and reading issues.
-type OAuth2Service struct {
+type OAuth2ConfigService struct {
 	sling *sling.Sling
 }
 
-// NewCOAuth2Service returns a new OAuth2Service.
-func NewOAuth2Service(httpClient *http.Client, config *config.KongConfiguration) *OAuth2Service {
-	return &OAuth2Service{
+// NewCOAuth2ConfigService returns a new OAuth2ConfigService.
+func NewOAuth2ConfigService(httpClient *http.Client, config *config.KongConfiguration) *OAuth2ConfigService {
+	return &OAuth2ConfigService{
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
 	}
 }
 
-func (s *OAuth2Service) Create(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
+func (s *OAuth2ConfigService) Create(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
 	oauth2 := new(OAuth2Config)
 	kongError := new(KongError)
 	resp, err := s.sling.New().Post("http://localhost:8001/consumers/"+consumerName+"/oauth2").BodyJSON(params).Receive(oauth2, kongError)
@@ -47,27 +47,27 @@ func (s *OAuth2Service) Create(params *OAuth2Config, consumerName string) (*OAut
 	return oauth2, resp, err
 }
 
-func (s *OAuth2Service) Get(consumerName string, oauth2ID string) (OAuth2Config, *http.Response, error) {
+func (s *OAuth2ConfigService) Get(consumerName string, oauth2ID string) (*OAuth2Config, *http.Response, error) {
 	oauth2config := new(OAuth2Config)
 	kongError := new(KongError)
 	resp, err := s.sling.New().Path(consumerName+"/oauth2/"+oauth2ID).Receive(oauth2config, kongError)
 	if err == nil {
 		err = kongError
 	}
-	return *oauth2config, resp, err
+	return oauth2config, resp, err
 }
 
-func (s *OAuth2Service) List(consumerName string) (OAuth2List, *http.Response, error) {
-	oauth2 := new(OAuth2List)
+func (s *OAuth2ConfigService) List(consumerName string) (*OAuth2ConfigList, *http.Response, error) {
+	oauth2configlist := new(OAuth2ConfigList)
 	kongError := new(KongError)
-	resp, err := s.sling.New().Path(consumerName+"/oauth2").Receive(oauth2, kongError)
+	resp, err := s.sling.New().Path(consumerName+"/oauth2").Receive(oauth2configlist, kongError)
 	if err == nil {
 		err = kongError
 	}
-	return *oauth2, resp, err
+	return oauth2configlist, resp, err
 }
 
-func (s *OAuth2Service) Update(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
+func (s *OAuth2ConfigService) Update(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
 	oauth2 := new(OAuth2Config)
 	kongError := new(KongError)
 	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/"+consumerName+"/oauth2/"+params.ID).BodyJSON(params).Receive(oauth2, kongError)
@@ -77,7 +77,7 @@ func (s *OAuth2Service) Update(params *OAuth2Config, consumerName string) (*OAut
 	return oauth2, resp, err
 }
 
-func (s *OAuth2Service) Delete(oauth2ID string, consumerName string) (string, *http.Response, error) {
+func (s *OAuth2ConfigService) Delete(oauth2ID string, consumerName string) (string, *http.Response, error) {
 	var message string
 	kongError := new(KongError)
 	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/"+consumerName+"/oauth2/"+oauth2ID).Receive(message, kongError)

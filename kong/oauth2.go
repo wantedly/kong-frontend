@@ -14,11 +14,11 @@ type Oauth2List struct {
 }
 
 type Oauth2Config struct {
-	ClientID     string `json:"client_id"`
-	ClientSecret string `json:"client_secret"`
-	ConsumerID   string `json:"consumer_id"`
-	CreatedAt    int    `json:"created_at"`
-	ID           string `json:"id"`
+	ClientID     string `json:"client_id,omitempty"`
+	ClientSecret string `json:"client_secret,omitempty"`
+	ConsumerID   string `json:"consumer_id,omitempty"`
+	CreatedAt    int    `json:"created_at,omitempty"`
+	ID           string `json:"id,omitempty"`
 	Name         string `json:"name"`
 	RedirectURI  string `json:"redirect_uri"`
 }

@@ -13,15 +13,9 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/apps">Apps</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <ul class="dropdown-menu">
-            <li><a href="/apis">API</a></li>
-            <li><a href="/apis">Consumer</a></li>
-          </ul>
-        </li>
+        <li><a href="/api">API</a></li>
+        <li><a href="/consumer">Consumer</a></li>
+        <li><a href="/oauth2">OAuth2</a></li>
       </ul>
     </div>
   </div>

@@ -17,7 +17,7 @@ type Client struct {
 	APIService      *APIService
 	ConsumerService *ConsumerService
 	PluginService   *PluginService
-	Oauth2Service   *Oauth2Service
+	OAuth2Service   *OAuth2Service
 	// other service endpoints...
 }
 
@@ -27,7 +27,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 		APIService:      NewAPIService(httpClient, config),
 		ConsumerService: NewConsumerService(httpClient, config),
 		PluginService:   NewPluginService(httpClient, config),
-		Oauth2Service:   NewOauth2Service(httpClient, config),
+		OAuth2Service:   NewOAuth2Service(httpClient, config),
 	}
 }
 
@@ -78,31 +78,32 @@ func main() {
 
 	//	plugin, _, _ := client.PluginService.Get("ec04cf37-920d-46fd-adb5-ce33f416d88b", "go-api")
 	//	fmt.Printf("Plugin:\n%v\n", plugin)
-	enablePlugins, resp, err := client.PluginService.GetEnabledPlugins()
-	fmt.Printf("Enable Plugins :\n%v\n%v\n%v\n", enablePlugins, resp, err)
 
-	generatePlugin := &Plugin{
-		Name: "oauth2",
-		Config: PluginConfig{
-			EnableClientCredentials: true,
-		},
-	}
-	plugin, resp, err := client.PluginService.Create(generatePlugin, "mockbin")
-	fmt.Printf("Create Plugin :\n%v\n%v\n%v\n%v\n", generatePlugin, plugin, resp, err)
+	//	enablePlugins, resp, err := client.PluginService.GetEnabledPlugins()
+	//	fmt.Printf("Enable Plugins :\n%v\n%v\n%v\n", enablePlugins, resp, err)
 
-	updatePlugin := &Plugin{
-		ID:   plugin.ID,
-		Name: "oauth2",
-		Config: PluginConfig{
-			EnableClientCredentials: true,
-		},
-	}
+	//	generatePlugin := &Plugin{
+	//		Name: "oauth2",
+	//		Config: PluginConfig{
+	//			EnableClientCredentials: true,
+	//		},
+	//	}
+	//	plugin, resp, err := client.PluginService.Create(generatePlugin, "mockbin")
+	//	fmt.Printf("Create Plugin :\n%v\n%v\n%v\n%v\n", generatePlugin, plugin, resp, err)
 
-	updatedPlugin, resp, err := client.PluginService.Update(updatePlugin, "mockbin")
-	fmt.Printf("Update Plugin :\n%v\n%v\n%v\n%v\n", updatePlugin, updatedPlugin, resp, err)
-	fmt.Printf("%v", updatedPlugin.ID)
-	message, resp, err := client.PluginService.Delete(updatedPlugin.ID, "mockbin")
-	fmt.Printf("Delete Plugin : \n%v\n%v\n%v\n", message, resp, err)
+	//	updatePlugin := &Plugin{
+	//		ID:   plugin.ID,
+	//		Name: "oauth2",
+	//		Config: PluginConfig{
+	//			EnableClientCredentials: true,
+	//		},
+	//	}
+
+	//	updatedPlugin, resp, err := client.PluginService.Update(updatePlugin, "mockbin")
+	//	fmt.Printf("Update Plugin :\n%v\n%v\n%v\n%v\n", updatePlugin, updatedPlugin, resp, err)
+	//	fmt.Printf("%v", updatedPlugin.ID)
+	//	message, resp, err := client.PluginService.Delete(updatedPlugin.ID, "mockbin")
+	//	fmt.Printf("Delete Plugin : \n%v\n%v\n%v\n", message, resp, err)
 
 	//	consumers, _, _ := client.ConsumerService.List()
 	//	fmt.Printf("Consumers:\n%v\n", consumers)
@@ -115,7 +116,7 @@ func main() {
 	//	}
 
 	//	consumer, resp, err := client.ConsumerService.Create(generateConsumer)
-	//	fmt.Printf("Create Consumer :\n%v\n%v\n%v\n%v\n", generateConsumer, &consumer, resp, err)
+	//	fmt.Printf("Create Consumer :\n%v\n%v\n%v\n%v\n", generateConsumer, consumer, resp, err)
 
 	//	updateConsumer := &Consumer{
 	//		ID:       consumer.ID,
@@ -123,15 +124,34 @@ func main() {
 	//	}
 
 	//	updatedConsumer, resp, err := client.ConsumerService.Update(updateConsumer)
-	//	fmt.Printf("Update Consumer :\n%v\n%v\n%v\n%v\n", updateConsumer, &updatedConsumer, resp, err)
+	//	fmt.Printf("Update Consumer :\n%v\n%v\n%v\n%v\n", updateConsumer, updatedConsumer, resp, err)
 
 	//	message, resp, err := client.ConsumerService.Delete(updatedConsumer.ID)
 	//	fmt.Printf("Delete Consumer : \n%v\n%v\n%v\n", message, resp, err)
 
-	//	oauth2, _, _ := client.Oauth2Service.List("gokun")
-	//	fmt.Printf("Oauth2:\n%v\n", oauth2)
+	// oauth2, _, _ := client.OAuth2Service.List("gokun")
+	// fmt.Printf("OAuth2:\n%v\n", oauth2)
 
-	//	targetOauth2Config, _, _ := client.Oauth2Service.Get("gokun", "86e4f18c-00a6-403f-a526-5d8fc3dac95d")
-	//	fmt.Printf("Oauth2:\n%v\n", targetOauth2Config)
+	// targetOAuth2Config, _, _ := client.OAuth2Service.Get("gokun", "86e4f18c-00a6-403f-a526-5d8fc3dac95d")
+	// fmt.Printf("OAuth2:\n%v\n", targetOAuth2Config)
+
+	generateOAuth2Config := &OAuth2Config{
+		Name:        "sakabe site",
+		RedirectURI: "http://koudaiii.com",
+	}
+
+	oauth2config, resp, err := client.OAuth2Service.Create(generateOAuth2Config, "gokun")
+	fmt.Printf("Create OAuth2 :\n%v\n%v\n%v\n%v\n", generateOAuth2Config, oauth2config, resp, err)
+
+	updateOAuth2Config := &OAuth2Config{
+		ID:   oauth2config.ID,
+		Name: "sakabeupdate",
+	}
+
+	updatedOAuth2Config, resp, err := client.OAuth2Service.Update(updateOAuth2Config, "gokun")
+	fmt.Printf("Update OAuth2Config :\n%v\n%v\n%v\n%v\n", updateOAuth2Config, updatedOAuth2Config, resp, err)
+
+	message, resp, err := client.OAuth2Service.Delete(updatedOAuth2Config.ID, "gokun")
+	fmt.Printf("Delete OAuth2Config : \n%v\n%v\n%v\n", message, resp, err)
 
 }

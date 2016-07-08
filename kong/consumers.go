@@ -9,8 +9,8 @@ import (
 )
 
 type Consumers struct {
-	Consumer []Consumer `json:"data"`
-	Total    int        `json:"total"`
+	Consumer []Consumer `json:"data,omitempty"`
+	Total    int        `json:"total,omitempty"`
 }
 
 type Consumer struct {

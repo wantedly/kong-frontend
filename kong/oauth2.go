@@ -9,8 +9,8 @@ import (
 )
 
 type Oauth2List struct {
-	Oauth2Config []Oauth2Config `json:"data"`
-	Total        int            `json:"total"`
+	Oauth2Config []Oauth2Config `json:"data,omitempty"`
+	Total        int            `json:"total,omitempty"`
 }
 
 type Oauth2Config struct {

@@ -9,8 +9,8 @@ import (
 )
 
 type APIs struct {
-	API   []API `json:"data"`
-	Total int   `json:"total"`
+	API   []API `json:"data,omitempty"`
+	Total int   `json:"total,omitempty"`
 }
 
 type API struct {

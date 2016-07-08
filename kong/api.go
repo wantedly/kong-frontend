@@ -42,6 +42,15 @@ func NewAPIService(httpClient *http.Client) *APIService {
 		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
 	}
 }
+func (s *APIService) Create(params *API) (API, *http.Response, error) {
+	api := new(API)
+	kongError := new(KongError)
+	resp, err := s.sling.New().Post("http://localhost:8001/apis").BodyJSON(params).Receive(api, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return *api, resp, err
+}
 
 func (s *APIService) Get(params string) (API, *http.Response, error) {
 	api := new(API)

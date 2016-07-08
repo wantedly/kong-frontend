@@ -67,3 +67,23 @@ func (s *APIService) List() (*APIs, *http.Response, error) {
 	}
 	return apis, resp, err
 }
+
+func (s *APIService) Update(params *API) (*API, *http.Response, error) {
+	api := new(API)
+	kongError := new(KongError)
+	resp, err := s.sling.New().Patch("http://localhost:8001/apis/"+params.ID).BodyJSON(params).Receive(api, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return api, resp, err
+}
+
+func (s *APIService) Delete(apiID string) (string, *http.Response, error) {
+	var message string
+	kongError := new(KongError)
+	resp, err := s.sling.New().Delete("http://localhost:8001/apis/"+apiID).Receive(message, kongError)
+	if err == nil {
+		err = kongError
+	}
+	return message, resp, err
+}

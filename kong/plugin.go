@@ -9,29 +9,29 @@ import (
 )
 
 type Plugins struct {
-	Plugin []Plugin `json:"data"`
-	Total  int      `json:"total"`
+	Plugin []Plugin `json:"data,omitempty"`
+	Total  int      `json:"total,omitempty"`
 }
 
 type Plugin struct {
-	APIID     string       `json:"api_id"`
-	Config    PluginConfig `json:"config"`
-	CreatedAt int          `json:"created_at"`
-	Enabled   bool         `json:"enabled"`
-	ID        string       `json:"id"`
-	Name      string       `json:"name"`
+	APIID     string       `json:"api_id,omitempty"`
+	Config    PluginConfig `json:"config,omitempty"`
+	CreatedAt int          `json:"created_at,omitempty"`
+	Enabled   bool         `json:"enabled,omitempty"`
+	ID        string       `json:"id,omitempty"`
+	Name      string       `json:"name,omitempty"`
 }
 
 type PluginConfig struct {
-	AcceptHTTPIfAlreadyTerminated bool   `json:"accept_http_if_already_terminated"`
-	EnableAuthorizationCode       bool   `json:"enable_authorization_code"`
-	EnableClientCredentials       bool   `json:"enable_client_credentials"`
-	EnableImplicitGrant           bool   `json:"enable_implicit_grant"`
-	EnablePasswordGrant           bool   `json:"enable_password_grant"`
-	HideCredentials               bool   `json:"hide_credentials"`
-	MandatoryScope                bool   `json:"mandatory_scope"`
-	ProvisionKey                  string `json:"provision_key"`
-	TokenExpiration               int    `json:"token_expiration"`
+	AcceptHTTPIfAlreadyTerminated bool   `json:"accept_http_if_already_terminated,omitempty"`
+	EnableAuthorizationCode       bool   `json:"enable_authorization_code,omitempty"`
+	EnableClientCredentials       bool   `json:"enable_client_credentials,omitempty"`
+	EnableImplicitGrant           bool   `json:"enable_implicit_grant,omitempty"`
+	EnablePasswordGrant           bool   `json:"enable_password_grant,omitempty"`
+	HideCredentials               bool   `json:"hide_credentials,omitempty"`
+	MandatoryScope                bool   `json:"mandatory_scope,omitempty"`
+	ProvisionKey                  string `json:"provision_key,omitempty"`
+	TokenExpiration               int    `json:"token_expiration,omitempty"`
 }
 
 // Services

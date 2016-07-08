@@ -8,19 +8,19 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/config"
 )
 
-type Oauth2List struct {
-	Oauth2Config []Oauth2Config `json:"data,omitempty"`
+type OAuth2List struct {
+	OAuth2Config []OAuth2Config `json:"data,omitempty"`
 	Total        int            `json:"total,omitempty"`
 }
 
-type Oauth2Config struct {
+type OAuth2Config struct {
 	ClientID     string `json:"client_id,omitempty"`
 	ClientSecret string `json:"client_secret,omitempty"`
 	ConsumerID   string `json:"consumer_id,omitempty"`
 	CreatedAt    int    `json:"created_at,omitempty"`
 	ID           string `json:"id,omitempty"`
-	Name         string `json:"name"`
-	RedirectURI  string `json:"redirect_uri"`
+	Name         string `json:"name,omitempty"`
+	RedirectURI  string `json:"redirect_uri,omitempty"`
 }
 
 // Services

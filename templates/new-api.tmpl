@@ -10,34 +10,31 @@
     {{ template "navbar" . }}
 
     <div class="container">
-        <h1>API</h1>
-        <p>
-          {{ if .error }}{{ .message }}{{ end }}
-        </p>
-        <div class="panel panel-default">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>RequestHost</th>
-                <th>RequestPath</th>
-                <th>StripRequestPath?</th>
-                <th>UpstreamURL</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-      </div>
+      <h1>API</h1>
+      <p>
+        {{ if .error }}{{ .message }}{{ end }}
+      </p>
+      <form class="" action="/apis" method="post">
+        <div class="form-group">
+          <label for="name">NAME:</label>
+          <input type="text" class="form-control" name="name" placeholder="name">
+        </div>
+        <div class="form-group">
+          <label for="upstream_url">Upstream URL:</label>
+          <input type="text" class="form-control" name="upstream_url" placeholder="http://localhost:5000">
+        </div>
+        <div class="form-group">
+          <label for="request_path">Request Path:</label>
+          <input type="text" class="form-control" name="request_path" placeholder="/go">
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="strip_request_path" value="true" checked="checked">Strip Request Path:</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="oauth2" value="true" checked="checked">Accept OAuth2:</label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
     </div>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>

@@ -10,6 +10,14 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/model/api"
 )
 
+type Params struct {
+	Name             string `form:"name" json:"name" binding:"required"`
+	UpstreamURL      string `form:"upstream_url" json:"upstream_url" binding:"required"`
+	RequestPath      string `form:"request_path" json:"request_path" binding:"required"`
+	StripRequestPath bool   `form:"strip_request_path" json:"request_path" binding:"omitempty"`
+	OAuth2           bool   `form:"oauth2" json:"oauth2" binding:"omitempty"`
+}
+
 type APIController struct {
 	*kong.APIService
 }
@@ -74,5 +82,29 @@ func (self *APIController) New(c *gin.Context) {
 }
 
 func (self *APIController) Create(c *gin.Context) {
+	var form Params
+	if c.Bind(&form) == nil {
+		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)
+		fmt.Fprintf(os.Stdout, "upstream_url %+v\n", form.UpstreamURL)
+		fmt.Fprintf(os.Stdout, "request_path %+v\n", form.RequestPath)
+		fmt.Fprintf(os.Stdout, "strip_request_path %+v\n", form.StripRequestPath)
+		fmt.Fprintf(os.Stdout, "oauth2 %+v\n", form.OAuth2)
+	} else {
+		c.HTML(http.StatusBadRequest, "new-api.tmpl", gin.H{
+			"error":   true,
+			"message": fmt.Sprintf("Please fix params"),
+		})
+		return
+	}
+
+	if api.Exists(self.APIService, form.Name) {
+		c.HTML(http.StatusConflict, "new-api.tmpl", gin.H{
+			"error":   true,
+			"message": fmt.Sprintf("API %s already exist.", form.Name),
+		})
+		return
+	}
+
 	c.Redirect(http.StatusSeeOther, "/apis")
+
 }

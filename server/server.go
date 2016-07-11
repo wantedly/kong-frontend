@@ -21,6 +21,7 @@ func Run(config *config.KongConfiguration) {
 	r.GET("/", rootController.Index)
 	r.GET("/apis", apiController.Index)
 	r.GET("/apis/:apiName", apiController.Get)
+	r.GET("/new-api", apiController.New)
 
 	r.Run()
 }

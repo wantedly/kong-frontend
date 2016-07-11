@@ -64,22 +64,15 @@ func (self *APIController) Get(c *gin.Context) {
 	return
 }
 
-// func (self *APIController) New(c *gin.Context) {
-// 	apiName := c.PostForm("apiName")
-//
-// 	err := api.Create(self.APIService, apiName)
-//
-// 	if err != nil {
-// 		fmt.Fprintf(os.Stderr, "%+v\n", err)
-//
-// 		c.HTML(http.StatusInternalServerError, "api.tmpl", gin.H{
-// 			"alert":   true,
-// 			"error":   true,
-// 			"message": "Failed to create api.",
-// 		})
-//
-// 		return
-// 	}
-//
-// 	c.Redirect(http.StatusSeeOther, "/apis/"+apiName)
-// }
+func (self *APIController) New(c *gin.Context) {
+	c.HTML(http.StatusOK, "new-api.tmpl", gin.H{
+		"alert":   false,
+		"error":   false,
+		"message": "",
+	})
+	return
+}
+
+func (self *APIController) Create(c *gin.Context) {
+	c.Redirect(http.StatusSeeOther, "/apis")
+}

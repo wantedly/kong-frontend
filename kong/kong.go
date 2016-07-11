@@ -33,7 +33,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 }
 
 func (e KongError) Error() string {
-	return fmt.Sprintf("kong: %v", e.Message)
+	return fmt.Sprintf("%v", e.Message)
 }
 
 // func main() {

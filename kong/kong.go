@@ -37,8 +37,11 @@ func (e KongError) Error() string {
 }
 
 // func main() {
-//	apis, _, _ := client.APIService.List()
-//	fmt.Printf("APIs:\n%v\n", apis)
+//   config, err := config.LoadConfig()
+//  	if err != nil {
+//               fmt.Fprintf(os.Stderr, "%+v\n", err)
+//               os.Exit(1)
+//       }
 //
 //	api, _, _ := client.APIService.Get("go-api")
 //	fmt.Printf("API:\n%v\n", api)

@@ -4,24 +4,31 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/koudaiii/kong-oauth-token-generator/config"
-	"github.com/koudaiii/kong-oauth-token-generator/model"
+	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
 type RootController struct {
-	*ApplicationController
+	APIService             *kong.APIService
+	AssigneesOAuth2Service *kong.AssigneesOAuth2Service
 }
 
-func NewRootController(config *config.KongConfiguration) *RootController {
-	return &RootController{NewApplicationController(config)}
+func NewRootController(client *kong.Client) *RootController {
+	return &RootController{
+		client.APIService,
+		client.AssigneesOAuth2Service,
+	}
 }
 
-func (s *RootController) Index(c *gin.Context) {
+func (r *RootController) Index(c *gin.Context) {
+	apis, _, err := r.APIService.List()
+	assignees, _, err := r.AssigneesOAuth2Service.List()
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"alert":     false,
 		"error":     false,
-		"logged_in": true,
 		"message":   "",
+		"apis":      apis,
+		"assignees": assignees,
+		"err":       err,
 	})
 	return
 }

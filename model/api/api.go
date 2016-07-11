@@ -1,6 +1,9 @@
 package api
 
 import (
+	_ "fmt"
+	_ "os"
+
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
@@ -25,6 +28,18 @@ func List(self *kong.APIService) (*kong.APIs, error) {
 	return apis, err
 }
 
-func New(self *kong.APIService) {
-
+func Exists(self *kong.APIService, apiName string) bool {
+	_, resp, _ := self.Get(apiName)
+	if resp.StatusCode != 404 {
+		return true
+	}
+	return false
 }
+
+func Get(self *kong.APIService, apiName string) (*kong.API, error) {
+	api, _, err := self.Get(apiName)
+	return api, err
+}
+
+// func Create(self *kong.APIService, apiname string) error {
+// }

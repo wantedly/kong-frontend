@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ .apiDetail.Name }}</title>
+    <title>API</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/octicons.css">
@@ -12,9 +12,12 @@
     <div class="container">
         <h1>API</h1>
         <p>
-          {{ if .error }}{{ .message }}{{ end }}
+          {{ if .error }}{{ .err }}{{ end }}
         </p>
         <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">API Total: {{ .total }}</div>
+          <!-- Table -->
           <table class="table">
             <thead>
               <tr>
@@ -27,14 +30,16 @@
               </tr>
             </thead>
             <tbody>
+              {{ range .apis }}
               <tr>
-                <td>{{ .apiDetail.ID }}</td>
-                <td>{{ .apiDetail.Name }}</td>
-                <td>{{ .apiDetail.RequestHost }}</td>
-                <td>{{ .apiDetail.RequestPath }}</td>
-                <td>{{ .apiDetail.StripRequestPath }}</td>
-                <td>{{ .apiDetail.UpstreamURL }}</td>
+                <td>{{ .ID }}</td>
+                <td>{{ .Name }}</td>
+                <td>{{ .RequestHost }}</td>
+                <td>{{ .RequestPath }}</td>
+                <td>{{ .StripRequestPath }}</td>
+                <td>{{ .UpstreamURL }}</td>
               </tr>
+              {{ end }}
             </tbody>
           </table>
       </div>

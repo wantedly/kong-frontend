@@ -19,7 +19,8 @@ func Run(config *config.KongConfiguration) {
 	// oauth2Controller := controller.NewOAuth2Controller(config)
 
 	r.GET("/", rootController.Index)
-	r.GET("/api", apiController.Index)
+	r.GET("/apis", apiController.Index)
+	r.GET("/apis/:apiName", apiController.Get)
 
 	r.Run()
 }

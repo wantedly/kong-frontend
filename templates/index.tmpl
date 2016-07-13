@@ -9,14 +9,11 @@
   <body>
     {{ template "navbar" . }}
     <div class="container">
-      <h1>API
-        <a class="btn btn-success btn-lg" href="/new-api" role="button">New</a>
-      </h1>
+      <h1>Kong OAuth Token Generator</h1>
       <p>
         {{ if .error }}{{ .err }}{{ end }}
       </p>
       <div class="panel panel-default">
-
         <!-- Default panel contents -->
         <div class="panel-heading">API Total: {{ .total }}
         </div>

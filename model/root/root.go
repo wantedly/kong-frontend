@@ -1,15 +1,13 @@
 package root
 
 import (
-	"fmt"
+	_ "fmt"
 
-	"github.com/koudaiii/kong-oauth-token-generator/config"
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
-func List(config *config.KongConfiguration) (*kong.APIs, error) {
-	client := kong.NewClient(nil, config)
-	apis, _, err := client.APIService.List()
-	fmt.Printf("APIs:\n%v\n", apis)
-	return apis, err
+func List(self *kong.Client) (*kong.APIs, *kong.AssigneesOAuth2List, error) {
+	apis, _, err := self.APIService.List()
+	assignees, _, err := self.AssigneesOAuth2Service.List()
+	return apis, assignees, err
 }

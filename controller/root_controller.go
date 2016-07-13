@@ -3,31 +3,28 @@ package controller
 import (
 	"net/http"
 
+	"github.com/koudaiii/kong-oauth-token-generator/model/root"
+
 	"github.com/gin-gonic/gin"
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
 type RootController struct {
-	APIService             *kong.APIService
-	AssigneesOAuth2Service *kong.AssigneesOAuth2Service
+	Client *kong.Client
 }
 
 func NewRootController(client *kong.Client) *RootController {
-	return &RootController{
-		client.APIService,
-		client.AssigneesOAuth2Service,
-	}
+	return &RootController{client}
 }
 
-func (r *RootController) Index(c *gin.Context) {
-	apis, _, err := r.APIService.List()
-	assignees, _, err := r.AssigneesOAuth2Service.List()
+func (self *RootController) Index(c *gin.Context) {
+	apis, assignees, err := root.List(self.Client)
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"alert":     false,
 		"error":     false,
 		"message":   "",
-		"apis":      apis,
-		"assignees": assignees,
+		"apis":      apis.API,
+		"assignees": assignees.AssigneesOAuth2,
 		"err":       err,
 	})
 	return

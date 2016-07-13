@@ -46,6 +46,36 @@
           </tbody>
         </table>
       </div>
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Assignees OAuth2 Total: {{ .total }}
+        </div>
+        <!-- Table -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>AccessToken</th>
+              <th>TokenType</th>
+              <th>CredentialID</th>
+              <th>ExpiresIn</th>
+              <th>CreatedAt</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ range .assignees }}
+            <tr>
+              <td>{{ .ID }}</td>
+              <td>{{ .AccessToken }}</td>
+              <td>{{ .TokenType }}</td>
+              <td>{{ .CredentialID }}</td>
+              <td>{{ .ExpiresIn }}</td>
+              <td>{{ .CreatedAt }}</td>
+            </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>

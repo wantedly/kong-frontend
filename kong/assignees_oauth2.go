@@ -9,8 +9,8 @@ import (
 )
 
 type AssigneesOAuth2List struct {
-	Data  []AssigneesOAuth2 `json:"data,omitempty"`
-	Total int               `json:"total,omitempty"`
+	AssigneesOAuth2 []AssigneesOAuth2 `json:"data,omitempty"`
+	Total           int               `json:"total,omitempty"`
 }
 
 type AssigneesOAuth2 struct {

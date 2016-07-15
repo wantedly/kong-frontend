@@ -66,8 +66,9 @@ func (self *APIController) Get(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "api.tmpl", gin.H{
-		"error":     false,
-		"apiDetail": apiDetail,
+		"error":        false,
+		"apiDetail":    apiDetail,
+		"enableOAuth2": enableOAuth2,
 	})
 	return
 }

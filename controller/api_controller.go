@@ -19,15 +19,15 @@ type Params struct {
 }
 
 type APIController struct {
-	*kong.APIService
+	Client *kong.Client
 }
 
 func NewAPIController(client *kong.Client) *APIController {
-	return &APIController{client.APIService}
+	return &APIController{client}
 }
 
 func (self *APIController) Index(c *gin.Context) {
-	apis, err := api.List(self.APIService)
+	apis, err := api.List(self.Client)
 	fmt.Fprintf(os.Stderr, "%+v\n", apis)
 	fmt.Fprintf(os.Stderr, "%+v\n", err)
 	c.HTML(http.StatusOK, "apis.tmpl", gin.H{
@@ -43,7 +43,7 @@ func (self *APIController) Index(c *gin.Context) {
 func (self *APIController) Get(c *gin.Context) {
 	apiName := c.Param("apiName")
 
-	if !api.Exists(self.APIService, apiName) {
+	if !api.Exists(self.Client, apiName) {
 		c.HTML(http.StatusNotFound, "api.tmpl", gin.H{
 			"error":   true,
 			"message": fmt.Sprintf("API %s does not exist.", apiName),
@@ -52,7 +52,7 @@ func (self *APIController) Get(c *gin.Context) {
 		return
 	}
 
-	apiDetail, err := api.Get(self.APIService, apiName)
+	apiDetail, enableOAuth2, err := api.Get(self.Client, apiName)
 	fmt.Fprintf(os.Stdout, "%+v\n", apiDetail)
 	if apiDetail == nil {
 		fmt.Fprintf(os.Stderr, "Err: %+v\nTarget api name: %+v\n", err, apiName)
@@ -97,7 +97,7 @@ func (self *APIController) Create(c *gin.Context) {
 		return
 	}
 
-	if api.Exists(self.APIService, form.Name) {
+	if api.Exists(self.Client, form.Name) {
 		c.HTML(http.StatusConflict, "new-api.tmpl", gin.H{
 			"error":   true,
 			"message": fmt.Sprintf("API %s already exist.", form.Name),

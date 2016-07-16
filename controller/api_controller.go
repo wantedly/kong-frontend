@@ -106,6 +106,33 @@ func (self *APIController) Create(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(http.StatusSeeOther, "/apis")
+	generateAPI := &kong.API{
+		Name:             form.Name,
+		UpstreamURL:      form.UpstreamURL,
+		RequestPath:      form.RequestPath,
+		StripRequestPath: form.StripRequestPath,
+	}
+	generatePlugin := &kong.Plugin{
+		Name: "oauth2",
+		Config: kong.PluginConfig{
+			EnableClientCredentials: form.OAuth2,
+		},
+	}
 
+	createdAPI, createdPlugin, err := api.Create(self.Client, generateAPI, generatePlugin)
+	if err != nil {
+		c.HTML(http.StatusServiceUnavailable, "new-api.tmpl", gin.H{
+			"error":   true,
+			"message": fmt.Sprintf("Please Check kong: %s", err),
+		})
+		return
+	}
+
+	c.HTML(http.StatusOK, "api.tmpl", gin.H{
+		"error":         false,
+		"createdAPI":    createdAPI,
+		"createdPlugin": createdPlugin,
+		"message":       fmt.Sprint("Success"),
+	})
+	return
 }

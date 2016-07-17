@@ -23,23 +23,38 @@ type API struct {
 	RequestHost      string `json:"request_host,omitempty"`
 }
 
-func List(self *kong.APIService) (*kong.APIs, error) {
-	apis, _, err := self.List()
+func List(self *kong.Client) (*kong.APIs, error) {
+	apis, _, err := self.APIService.List()
 	return apis, err
 }
 
-func Exists(self *kong.APIService, apiName string) bool {
-	_, resp, _ := self.Get(apiName)
+func Exists(self *kong.Client, apiName string) bool {
+	_, resp, _ := self.APIService.Get(apiName)
 	if resp.StatusCode != 404 {
 		return true
 	}
 	return false
 }
 
-func Get(self *kong.APIService, apiName string) (*kong.API, error) {
-	api, _, err := self.Get(apiName)
-	return api, err
+func Get(self *kong.Client, apiName string) (*kong.API, bool, error) {
+	api, _, err := self.APIService.Get(apiName)
+	plugins, _, err := self.PluginService.List(apiName)
+	for _, plugin := range plugins.Plugin {
+		if plugin.Name == "oauth2" {
+			return api, true, err
+		}
+	}
+	return api, false, err
 }
 
-// func Create(self *kong.APIService, apiname string) error {
-// }
+func Create(self *kong.Client, generateAPI *kong.API, generatePlugin *kong.Plugin) (*kong.API, *kong.Plugin, error) {
+	api, _, err := self.APIService.Create(generateAPI)
+	if err != nil {
+		return nil, nil, err
+	}
+	plugin, _, err := self.PluginService.Create(generatePlugin, generateAPI.Name)
+	if err != nil {
+		return nil, nil, err
+	}
+	return api, plugin, err
+}

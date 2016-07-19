@@ -84,6 +84,7 @@ func (self *APIController) New(c *gin.Context) {
 
 func (self *APIController) Create(c *gin.Context) {
 	var form Params
+	enableOAuth2 := false
 	if c.Bind(&form) == nil {
 		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)
 		fmt.Fprintf(os.Stdout, "upstream_url %+v\n", form.UpstreamURL)
@@ -128,10 +129,14 @@ func (self *APIController) Create(c *gin.Context) {
 		return
 	}
 
+	if createdPlugin.Name == "oauth2" {
+		enableOAuth2 = true
+	}
+
 	c.HTML(http.StatusOK, "api.tmpl", gin.H{
 		"error":        false,
 		"apiDetail":    createdAPI,
-		"enableOAuth2": createdPlugin,
+		"enableOAuth2": enableOAuth2,
 		"message":      fmt.Sprintf("Success"),
 	})
 	return

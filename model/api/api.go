@@ -48,6 +48,15 @@ func Get(self *kong.Client, apiName string) (*kong.API, bool, error) {
 	return api, false, err
 }
 
+func Delete(self *kong.Client, apiName string) (string, error) {
+	api, _, err := self.APIService.Get(apiName)
+	if err != nil {
+		return "", err
+	}
+	message, _, err := self.APIService.Delete(api.ID)
+	return message, err
+}
+
 func Create(self *kong.Client, generateAPI *kong.API, generatePlugin *kong.Plugin) (*kong.API, *kong.Plugin, error) {
 	api, _, err := self.APIService.Create(generateAPI)
 	if err != nil {

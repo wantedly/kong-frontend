@@ -129,10 +129,10 @@ func (self *APIController) Create(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "api.tmpl", gin.H{
-		"error":         false,
-		"createdAPI":    createdAPI,
-		"createdPlugin": createdPlugin,
-		"message":       fmt.Sprint("Success"),
+		"error":        false,
+		"apiDetail":    createdAPI,
+		"enableOAuth2": createdPlugin,
+		"message":      fmt.Sprintf("Success"),
 	})
 	return
 }

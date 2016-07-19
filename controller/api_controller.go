@@ -112,10 +112,11 @@ func (self *APIController) Create(c *gin.Context) {
 		RequestPath:      form.RequestPath,
 		StripRequestPath: form.StripRequestPath,
 	}
+
 	generatePlugin := &kong.Plugin{
 		Name: "oauth2",
 		Config: kong.PluginConfig{
-			EnableClientCredentials: form.OAuth2,
+			EnableClientCredentials: true,
 		},
 	}
 

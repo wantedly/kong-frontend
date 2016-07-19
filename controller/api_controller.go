@@ -82,6 +82,22 @@ func (self *APIController) New(c *gin.Context) {
 	return
 }
 
+func (self *APIController) Delete(c *gin.Context) {
+	apiName := c.Param("apiName")
+	message, err := api.Delete(self.Client, apiName)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "apis.tmpl", gin.H{
+			"error":   true,
+			"err":     fmt.Sprintf("%s", err),
+			"message": fmt.Sprintf("%s", message),
+		})
+	}
+
+	c.Redirect(http.StatusMovedPermanently, "/apis")
+
+	return
+}
+
 func (self *APIController) Create(c *gin.Context) {
 	var form Params
 	enableOAuth2 := false

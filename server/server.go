@@ -24,6 +24,7 @@ func Run(config *config.KongConfiguration) {
 	r.GET("/apis", apiController.Index)
 	r.POST("/apis", apiController.Create)
 	r.GET("/apis/:apiName", apiController.Get)
+	r.POST("/apis/:apiName/delete", apiController.Delete)
 	r.GET("/new-api", apiController.New)
 
 	r.Run()

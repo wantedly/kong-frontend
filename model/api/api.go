@@ -53,6 +53,7 @@ func Create(self *kong.Client, generateAPI *kong.API, generatePlugin *kong.Plugi
 	if err != nil {
 		return nil, nil, err
 	}
+	generatePlugin.ID = api.ID
 	plugin, _, err := self.PluginService.Create(generatePlugin, generateAPI.Name)
 	if err != nil {
 		return nil, nil, err

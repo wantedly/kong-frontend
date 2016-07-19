@@ -12,6 +12,7 @@ func Run(config *config.KongConfiguration) {
 	r.Static("/assets", "assets")
 	r.LoadHTMLGlob("templates/*")
 
+	r.Use(gin.Logger())
 	client := kong.NewClient(nil, config)
 	rootController := controller.NewRootController(client)
 	apiController := controller.NewAPIController(client)

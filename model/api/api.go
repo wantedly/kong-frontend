@@ -7,11 +7,6 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
-type APIs struct {
-	API   []API `json:"data,omitempty"`
-	Total int   `json:"total,omitempty"`
-}
-
 type API struct {
 	CreatedAt        int    `json:"created_at,omitempty"`
 	ID               string `json:"id,omitempty"`

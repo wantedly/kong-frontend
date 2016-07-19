@@ -89,7 +89,6 @@ func (self *APIController) Create(c *gin.Context) {
 		fmt.Fprintf(os.Stdout, "upstream_url %+v\n", form.UpstreamURL)
 		fmt.Fprintf(os.Stdout, "request_path %+v\n", form.RequestPath)
 		fmt.Fprintf(os.Stdout, "strip_request_path %+v\n", form.StripRequestPath)
-		fmt.Fprintf(os.Stdout, "oauth2 %+v\n", form.OAuth2)
 	} else {
 		c.HTML(http.StatusBadRequest, "new-api.tmpl", gin.H{
 			"error":   true,

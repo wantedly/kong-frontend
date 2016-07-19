@@ -33,7 +33,13 @@ func Exists(self *kong.Client, apiName string) bool {
 
 func Get(self *kong.Client, apiName string) (*kong.API, bool, error) {
 	api, _, err := self.APIService.Get(apiName)
+	if err != nil {
+		return nil, false, err
+	}
 	plugins, _, err := self.PluginService.List(apiName)
+	if err != nil {
+		return nil, false, err
+	}
 	for _, plugin := range plugins.Plugin {
 		if plugin.Name == "oauth2" {
 			return api, true, err

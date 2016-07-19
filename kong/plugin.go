@@ -54,60 +54,36 @@ func NewPluginService(httpClient *http.Client, config *config.KongConfiguration)
 
 func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, error) {
 	plugins := new(EnabledPlugin)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Get("http://localhost:8001/plugins/enabled").Receive(plugins, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Get("http://localhost:8001/plugins/enabled").ReceiveSuccess(plugins)
 	return plugins, resp, err
 }
 
 func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Post("http://localhost:8001/apis/"+apiName+"/plugins").BodyJSON(params).Receive(plugin, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Post("http://localhost:8001/apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
 	return plugin, resp, err
 }
 
 func (s *PluginService) Get(pluginID string, apiName string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(apiName+"/plugins/"+pluginID).Receive(plugin, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(apiName + "/plugins/" + pluginID).ReceiveSuccess(plugin)
 	return plugin, resp, err
 }
 
 func (s *PluginService) List(apiName string) (*Plugins, *http.Response, error) {
 	plugins := new(Plugins)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(apiName+"/plugins/").Receive(plugins, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(apiName + "/plugins/").ReceiveSuccess(plugins)
 	return plugins, resp, err
 }
 
 func (s *PluginService) Update(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
 	api := new(Plugin)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Patch("http://localhost:8001/apis/"+apiName+"/plugins/"+params.ID).BodyJSON(params).Receive(api, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Patch("http://localhost:8001/apis/" + apiName + "/plugins/" + params.ID).BodyJSON(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
 func (s *PluginService) Delete(pluginID string, apiName string) (string, *http.Response, error) {
 	var message string
-	kongError := new(KongError)
-	resp, err := s.sling.New().Delete("http://localhost:8001/apis/"+apiName+"/plugins/"+pluginID).Receive(message, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Delete("http://localhost:8001/apis/" + apiName + "/plugins/" + pluginID).ReceiveSuccess(message)
 	return message, resp, err
 }

@@ -39,50 +39,30 @@ func NewOAuth2ConfigService(httpClient *http.Client, config *config.KongConfigur
 
 func (s *OAuth2ConfigService) Create(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
 	oauth2 := new(OAuth2Config)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Post("http://localhost:8001/consumers/"+consumerName+"/oauth2").BodyJSON(params).Receive(oauth2, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Post("http://localhost:8001/consumers/" + consumerName + "/oauth2").BodyJSON(params).ReceiveSuccess(oauth2)
 	return oauth2, resp, err
 }
 
 func (s *OAuth2ConfigService) Get(consumerName string, oauth2ID string) (*OAuth2Config, *http.Response, error) {
 	oauth2config := new(OAuth2Config)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(consumerName+"/oauth2/"+oauth2ID).Receive(oauth2config, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(consumerName + "/oauth2/" + oauth2ID).ReceiveSuccess(oauth2config)
 	return oauth2config, resp, err
 }
 
 func (s *OAuth2ConfigService) List(consumerName string) (*OAuth2ConfigList, *http.Response, error) {
 	oauth2configlist := new(OAuth2ConfigList)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(consumerName+"/oauth2").Receive(oauth2configlist, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(consumerName + "/oauth2").ReceiveSuccess(oauth2configlist)
 	return oauth2configlist, resp, err
 }
 
 func (s *OAuth2ConfigService) Update(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
 	oauth2 := new(OAuth2Config)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/"+consumerName+"/oauth2/"+params.ID).BodyJSON(params).Receive(oauth2, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/" + consumerName + "/oauth2/" + params.ID).BodyJSON(params).ReceiveSuccess(oauth2)
 	return oauth2, resp, err
 }
 
 func (s *OAuth2ConfigService) Delete(oauth2ID string, consumerName string) (string, *http.Response, error) {
 	var message string
-	kongError := new(KongError)
-	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/"+consumerName+"/oauth2/"+oauth2ID).Receive(message, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/" + consumerName + "/oauth2/" + oauth2ID).ReceiveSuccess(message)
 	return message, resp, err
 }

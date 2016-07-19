@@ -35,50 +35,30 @@ func NewConsumerService(httpClient *http.Client, config *config.KongConfiguratio
 
 func (s *ConsumerService) Create(params *Consumer) (*Consumer, *http.Response, error) {
 	consumer := new(Consumer)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Post("http://localhost:8001/consumers").BodyJSON(params).Receive(consumer, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Post("http://localhost:8001/consumers").BodyJSON(params).ReceiveSuccess(consumer)
 	return consumer, resp, err
 }
 
 func (s *ConsumerService) Get(params string) (*Consumer, *http.Response, error) {
 	consumer := new(Consumer)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(params).Receive(consumer, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(params).ReceiveSuccess(consumer)
 	return consumer, resp, err
 }
 
 func (s *ConsumerService) List() (*Consumers, *http.Response, error) {
 	consumers := new(Consumers)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Receive(consumers, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().ReceiveSuccess(consumers)
 	return consumers, resp, err
 }
 
 func (s *ConsumerService) Update(params *Consumer) (*Consumer, *http.Response, error) {
 	consumer := new(Consumer)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/"+params.ID).BodyJSON(params).Receive(consumer, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/" + params.ID).BodyJSON(params).ReceiveSuccess(consumer)
 	return consumer, resp, err
 }
 
 func (s *ConsumerService) Delete(consumerID string) (string, *http.Response, error) {
 	var message string
-	kongError := new(KongError)
-	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/"+consumerID).Receive(message, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/" + consumerID).ReceiveSuccess(message)
 	return message, resp, err
 }

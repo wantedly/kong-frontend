@@ -38,50 +38,30 @@ func NewAssigneesOAuth2Service(httpClient *http.Client, config *config.KongConfi
 
 func (s *AssigneesOAuth2Service) Create(params *AssigneesOAuth2) (*AssigneesOAuth2, *http.Response, error) {
 	assigneesOAuth2 := new(AssigneesOAuth2)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Post("http://localhost:8001/oauth2_tokens").BodyJSON(params).Receive(assigneesOAuth2, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Post("http://localhost:8001/oauth2_tokens").BodyJSON(params).ReceiveSuccess(assigneesOAuth2)
 	return assigneesOAuth2, resp, err
 }
 
 func (s *AssigneesOAuth2Service) Get(oauth2ID string) (*AssigneesOAuth2, *http.Response, error) {
 	assigneesOAuth2 := new(AssigneesOAuth2)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(oauth2ID).Receive(assigneesOAuth2, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(oauth2ID).ReceiveSuccess(assigneesOAuth2)
 	return assigneesOAuth2, resp, err
 }
 
 func (s *AssigneesOAuth2Service) List() (*AssigneesOAuth2List, *http.Response, error) {
 	assigneesOAuth2List := new(AssigneesOAuth2List)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Receive(assigneesOAuth2List, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().ReceiveSuccess(assigneesOAuth2List)
 	return assigneesOAuth2List, resp, err
 }
 
 func (s *AssigneesOAuth2Service) Update(params *AssigneesOAuth2) (*AssigneesOAuth2, *http.Response, error) {
 	assigneesOAuth2 := new(AssigneesOAuth2)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Patch("http://localhost:8001/oauth2_tokens/"+params.ID).BodyJSON(params).Receive(assigneesOAuth2, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Patch("http://localhost:8001/oauth2_tokens/" + params.ID).BodyJSON(params).ReceiveSuccess(assigneesOAuth2)
 	return assigneesOAuth2, resp, err
 }
 
 func (s *AssigneesOAuth2Service) Delete(oauth2ID string) (string, *http.Response, error) {
 	var message string
-	kongError := new(KongError)
-	resp, err := s.sling.New().Delete("http://localhost:8001/oauth2_tokens/"+oauth2ID).Receive(message, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Delete("http://localhost:8001/oauth2_tokens/" + oauth2ID).ReceiveSuccess(message)
 	return message, resp, err
 }

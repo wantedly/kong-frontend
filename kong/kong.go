@@ -1,15 +1,11 @@
 package kong
 
 import (
-	"fmt"
+	_ "fmt"
 	"net/http"
 
 	"github.com/koudaiii/kong-oauth-token-generator/config"
 )
-
-type KongError struct {
-	Message string `json:"message"`
-}
 
 // Client is kong client
 type Client struct {
@@ -30,10 +26,6 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 		OAuth2ConfigService:    NewOAuth2ConfigService(httpClient, config),
 		AssigneesOAuth2Service: NewAssigneesOAuth2Service(httpClient, config),
 	}
-}
-
-func (e KongError) Error() string {
-	return fmt.Sprintf("%v", e.Message)
 }
 
 // func main() {

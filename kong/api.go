@@ -40,50 +40,30 @@ func NewAPIService(httpClient *http.Client, config *config.KongConfiguration) *A
 
 func (s *APIService) Create(params *API) (*API, *http.Response, error) {
 	api := new(API)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Post("http://localhost:8001/apis").BodyJSON(params).Receive(api, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Post("http://localhost:8001/apis").BodyJSON(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
 func (s *APIService) Get(params string) (*API, *http.Response, error) {
 	api := new(API)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Path(params).Receive(api, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Path(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
 func (s *APIService) List() (*APIs, *http.Response, error) {
 	apis := new(APIs)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Receive(apis, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().ReceiveSuccess(apis)
 	return apis, resp, err
 }
 
 func (s *APIService) Update(params *API) (*API, *http.Response, error) {
 	api := new(API)
-	kongError := new(KongError)
-	resp, err := s.sling.New().Patch("http://localhost:8001/apis/"+params.ID).BodyJSON(params).Receive(api, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Patch("http://localhost:8001/apis/" + params.ID).BodyJSON(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
 func (s *APIService) Delete(apiID string) (string, *http.Response, error) {
 	var message string
-	kongError := new(KongError)
-	resp, err := s.sling.New().Delete("http://localhost:8001/apis/"+apiID).Receive(message, kongError)
-	if err == nil {
-		err = kongError
-	}
+	resp, err := s.sling.New().Delete("http://localhost:8001/apis/" + apiID).ReceiveSuccess(message)
 	return message, resp, err
 }

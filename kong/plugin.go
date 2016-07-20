@@ -42,25 +42,27 @@ type EnabledPlugin struct {
 
 // PluginService provides methods for creating and reading issues.
 type PluginService struct {
-	sling *sling.Sling
+	sling  *sling.Sling
+	config *config.KongConfiguration
 }
 
 // NewPluginService returns a new PluginService.
 func NewPluginService(httpClient *http.Client, config *config.KongConfiguration) *PluginService {
 	return &PluginService{
-		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
+		sling:  sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
+		config: config,
 	}
 }
 
 func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, error) {
 	plugins := new(EnabledPlugin)
-	resp, err := s.sling.New().Get("http://localhost:8001/plugins/enabled").ReceiveSuccess(plugins)
+	resp, err := s.sling.New().Get(s.config.KongAdminURL + "plugins/enabled").ReceiveSuccess(plugins)
 	return plugins, resp, err
 }
 
 func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
-	resp, err := s.sling.New().Post("http://localhost:8001/apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
 	return plugin, resp, err
 }
 
@@ -78,12 +80,12 @@ func (s *PluginService) List(apiName string) (*Plugins, *http.Response, error) {
 
 func (s *PluginService) Update(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
 	api := new(Plugin)
-	resp, err := s.sling.New().Patch("http://localhost:8001/apis/" + apiName + "/plugins/" + params.ID).BodyJSON(params).ReceiveSuccess(api)
+	resp, err := s.sling.New().Patch(s.config.KongAdminURL + "apis/" + apiName + "/plugins/" + params.ID).BodyJSON(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
 func (s *PluginService) Delete(pluginID string, apiName string) (string, *http.Response, error) {
 	var message string
-	resp, err := s.sling.New().Delete("http://localhost:8001/apis/" + apiName + "/plugins/" + pluginID).ReceiveSuccess(message)
+	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "apis/" + apiName + "/plugins/" + pluginID).ReceiveSuccess(message)
 	return message, resp, err
 }

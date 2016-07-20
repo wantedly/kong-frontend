@@ -28,19 +28,21 @@ type API struct {
 
 // APIService provides methods for creating and reading issues.
 type APIService struct {
-	sling *sling.Sling
+	sling  *sling.Sling
+	config *config.KongConfiguration
 }
 
 // NewAPIService returns a new APIService.
 func NewAPIService(httpClient *http.Client, config *config.KongConfiguration) *APIService {
 	return &APIService{
-		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
+		sling:  sling.New().Client(httpClient).Base(config.KongAdminURL + "apis/"),
+		config: config,
 	}
 }
 
 func (s *APIService) Create(params *API) (*API, *http.Response, error) {
 	api := new(API)
-	resp, err := s.sling.New().Post("http://localhost:8001/apis").BodyJSON(params).ReceiveSuccess(api)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "apis/").BodyJSON(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
@@ -58,12 +60,12 @@ func (s *APIService) List() (*APIs, *http.Response, error) {
 
 func (s *APIService) Update(params *API) (*API, *http.Response, error) {
 	api := new(API)
-	resp, err := s.sling.New().Patch("http://localhost:8001/apis/" + params.ID).BodyJSON(params).ReceiveSuccess(api)
+	resp, err := s.sling.New().Patch(s.config.KongAdminURL + "apis/" + params.ID).BodyJSON(params).ReceiveSuccess(api)
 	return api, resp, err
 }
 
 func (s *APIService) Delete(apiID string) (string, *http.Response, error) {
 	var message string
-	resp, err := s.sling.New().Delete("http://localhost:8001/apis/" + apiID).ReceiveSuccess(message)
+	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "apis/" + apiID).ReceiveSuccess(message)
 	return message, resp, err
 }

@@ -27,19 +27,21 @@ type OAuth2Config struct {
 
 // ConfigService provides methods for creating and reading issues.
 type OAuth2ConfigService struct {
-	sling *sling.Sling
+	sling  *sling.Sling
+	config *config.KongConfiguration
 }
 
 // NewCOAuth2ConfigService returns a new OAuth2ConfigService.
 func NewOAuth2ConfigService(httpClient *http.Client, config *config.KongConfiguration) *OAuth2ConfigService {
 	return &OAuth2ConfigService{
-		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
+		sling:  sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
+		config: config,
 	}
 }
 
 func (s *OAuth2ConfigService) Create(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
 	oauth2 := new(OAuth2Config)
-	resp, err := s.sling.New().Post("http://localhost:8001/consumers/" + consumerName + "/oauth2").BodyJSON(params).ReceiveSuccess(oauth2)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "consumers/" + consumerName + "/oauth2").BodyJSON(params).ReceiveSuccess(oauth2)
 	return oauth2, resp, err
 }
 
@@ -57,12 +59,12 @@ func (s *OAuth2ConfigService) List(consumerName string) (*OAuth2ConfigList, *htt
 
 func (s *OAuth2ConfigService) Update(params *OAuth2Config, consumerName string) (*OAuth2Config, *http.Response, error) {
 	oauth2 := new(OAuth2Config)
-	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/" + consumerName + "/oauth2/" + params.ID).BodyJSON(params).ReceiveSuccess(oauth2)
+	resp, err := s.sling.New().Patch(s.config.KongAdminURL + "consumers/" + consumerName + "/oauth2/" + params.ID).BodyJSON(params).ReceiveSuccess(oauth2)
 	return oauth2, resp, err
 }
 
 func (s *OAuth2ConfigService) Delete(oauth2ID string, consumerName string) (string, *http.Response, error) {
 	var message string
-	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/" + consumerName + "/oauth2/" + oauth2ID).ReceiveSuccess(message)
+	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "consumers/" + consumerName + "/oauth2/" + oauth2ID).ReceiveSuccess(message)
 	return message, resp, err
 }

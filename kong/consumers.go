@@ -23,19 +23,21 @@ type Consumer struct {
 
 // ConsumerService provides methods for creating and reading issues.
 type ConsumerService struct {
-	sling *sling.Sling
+	sling  *sling.Sling
+	config *config.KongConfiguration
 }
 
 // NewConsumerService returns a new ConsumerService.
 func NewConsumerService(httpClient *http.Client, config *config.KongConfiguration) *ConsumerService {
 	return &ConsumerService{
-		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
+		sling:  sling.New().Client(httpClient).Base(config.KongAdminURL + "consumers/"),
+		config: config,
 	}
 }
 
 func (s *ConsumerService) Create(params *Consumer) (*Consumer, *http.Response, error) {
 	consumer := new(Consumer)
-	resp, err := s.sling.New().Post("http://localhost:8001/consumers").BodyJSON(params).ReceiveSuccess(consumer)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "consumers").BodyJSON(params).ReceiveSuccess(consumer)
 	return consumer, resp, err
 }
 
@@ -53,12 +55,12 @@ func (s *ConsumerService) List() (*Consumers, *http.Response, error) {
 
 func (s *ConsumerService) Update(params *Consumer) (*Consumer, *http.Response, error) {
 	consumer := new(Consumer)
-	resp, err := s.sling.New().Patch("http://localhost:8001/consumers/" + params.ID).BodyJSON(params).ReceiveSuccess(consumer)
+	resp, err := s.sling.New().Patch(s.config.KongAdminURL + "consumers/" + params.ID).BodyJSON(params).ReceiveSuccess(consumer)
 	return consumer, resp, err
 }
 
 func (s *ConsumerService) Delete(consumerID string) (string, *http.Response, error) {
 	var message string
-	resp, err := s.sling.New().Delete("http://localhost:8001/consumers/" + consumerID).ReceiveSuccess(message)
+	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "consumers/" + consumerID).ReceiveSuccess(message)
 	return message, resp, err
 }

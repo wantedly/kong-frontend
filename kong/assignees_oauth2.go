@@ -26,19 +26,21 @@ type AssigneesOAuth2 struct {
 
 // ConfigService provides methods for creating and reading issues.
 type AssigneesOAuth2Service struct {
-	sling *sling.Sling
+	sling  *sling.Sling
+	config *config.KongConfiguration
 }
 
 // NewCOAuth2Service returns a new OAuth2Service.
 func NewAssigneesOAuth2Service(httpClient *http.Client, config *config.KongConfiguration) *AssigneesOAuth2Service {
 	return &AssigneesOAuth2Service{
-		sling: sling.New().Client(httpClient).Base(config.KongAdminURL + "oauth2_tokens/"),
+		sling:  sling.New().Client(httpClient).Base(config.KongAdminURL + "oauth2_tokens/"),
+		config: config,
 	}
 }
 
 func (s *AssigneesOAuth2Service) Create(params *AssigneesOAuth2) (*AssigneesOAuth2, *http.Response, error) {
 	assigneesOAuth2 := new(AssigneesOAuth2)
-	resp, err := s.sling.New().Post("http://localhost:8001/oauth2_tokens").BodyJSON(params).ReceiveSuccess(assigneesOAuth2)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "oauth2_tokens").BodyJSON(params).ReceiveSuccess(assigneesOAuth2)
 	return assigneesOAuth2, resp, err
 }
 
@@ -56,12 +58,12 @@ func (s *AssigneesOAuth2Service) List() (*AssigneesOAuth2List, *http.Response, e
 
 func (s *AssigneesOAuth2Service) Update(params *AssigneesOAuth2) (*AssigneesOAuth2, *http.Response, error) {
 	assigneesOAuth2 := new(AssigneesOAuth2)
-	resp, err := s.sling.New().Patch("http://localhost:8001/oauth2_tokens/" + params.ID).BodyJSON(params).ReceiveSuccess(assigneesOAuth2)
+	resp, err := s.sling.New().Patch(s.config.KongAdminURL + "oauth2_tokens/" + params.ID).BodyJSON(params).ReceiveSuccess(assigneesOAuth2)
 	return assigneesOAuth2, resp, err
 }
 
 func (s *AssigneesOAuth2Service) Delete(oauth2ID string) (string, *http.Response, error) {
 	var message string
-	resp, err := s.sling.New().Delete("http://localhost:8001/oauth2_tokens/" + oauth2ID).ReceiveSuccess(message)
+	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "oauth2_tokens/" + oauth2ID).ReceiveSuccess(message)
 	return message, resp, err
 }

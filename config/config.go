@@ -8,14 +8,18 @@ import (
 )
 
 type KongConfiguration struct {
-	KongAdminHost string `envconfig:"KONG_HOST" default:"localhost"`
-	KongAdminPort string `envconfig:"KONG_PORT" default:"8001"`
-	KongAdminURL  string `envconfig:"KONG_URL" default:""`
+	KongAdminHost string `envconfig:"host" default:"localhost"`
+	KongAdminPort string `envconfig:"port" default:"8001"`
+	KongAdminURL  string `envconfig:"url" default:""`
 }
+
+const (
+	ConfigPrefix = "kong"
+)
 
 func LoadConfig() (*KongConfiguration, error) {
 	var config KongConfiguration
-	err := envconfig.Process("", &config)
+	err := envconfig.Process(ConfigPrefix, &config)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to load config from envs.")
 	}

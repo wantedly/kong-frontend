@@ -5,7 +5,7 @@ services:
     depends_on:
       - kong
     environment:
-      - KONG_URL=kong
+      - KONG_HOST=kong
       - KONG_PORT=8001
     ports:
       - 8080

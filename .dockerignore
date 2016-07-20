@@ -1,0 +1,6 @@
+.env*
+bin/
+doc
+README.md
+.gitignore
+.travis.yml

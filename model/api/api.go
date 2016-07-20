@@ -25,6 +25,9 @@ func List(self *kong.Client) (*kong.APIs, error) {
 
 func Exists(self *kong.Client, apiName string) bool {
 	_, resp, _ := self.APIService.Get(apiName)
+	if resp != nil {
+		return false
+	}
 	if resp.StatusCode != 404 {
 		return true
 	}

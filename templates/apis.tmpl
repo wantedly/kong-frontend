@@ -44,7 +44,7 @@
               <td>{{ .UpstreamURL }}</td>
               <td>
                 <form method="POST" action="/apis/{{ .Name }}/delete">
-                  <button type="submit" class="btn btn-danger" onclick='return confirm("本当に削除しますか?");'>
+                  <button type="submit" class="btn btn-danger" onclick='return confirm("Delete {{ .Name }} ?");'>
                     Delete
                   </button>
                 </form>

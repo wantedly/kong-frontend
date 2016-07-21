@@ -1,8 +1,6 @@
 package oauth2
 
 import (
-	_ "fmt"
-
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 

@@ -4,11 +4,9 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
-func List(self *kong.Client) (*kong.Consumers, *kong.AssigneesOAuth2s, error) {
+func List(self *kong.Client) (*kong.Consumers, error) {
 	consumers, _, err := self.ConsumerService.List()
-	assignees, _, err := self.AssigneesOAuth2Service.List()
-
-	return consumers, assignees, err
+	return consumers, err
 }
 
 func Exists(self *kong.Client, consumerName string) bool {

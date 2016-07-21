@@ -22,12 +22,25 @@ func Exists(self *kong.Client, consumerName string) bool {
 	return false
 }
 
-func Get(self *kong.Client, consumerName string) (*kong.Consumer, error) {
+func Get(self *kong.Client, consumerName string) (*kong.Consumer, *kong.AssigneesOAuth2, error) {
 	consumer, _, err := self.ConsumerService.Get(consumerName)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return consumer, err
+	oauth2configs, _, err := self.OAuth2ConfigService.List(consumer.Username)
+	if err != nil {
+		return consumer, nil, err
+	}
+	assignees, _, err := self.AssigneesOAuth2Service.List()
+	if err != nil {
+		return consumer, nil, err
+	}
+	for _, assignee := range assignees.AssigneesOAuth2 {
+		if assignee.CredentialID == oauth2configs.OAuth2Config[0].ID {
+			return consumer, &assignee, err
+		}
+	}
+	return consumer, nil, err
 }
 
 func Delete(self *kong.Client, consumerName string) (string, error) {

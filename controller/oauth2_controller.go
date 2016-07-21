@@ -48,8 +48,8 @@ func (self *OAuth2Controller) Get(c *gin.Context) {
 		return
 	}
 
-	consumerDetail, err := oauth2.Get(self.Client, consumerName)
-	fmt.Fprintf(os.Stdout, "%+v\n", consumerDetail)
+	consumerDetail, assigneesOAuth2Detail, err := oauth2.Get(self.Client, consumerName)
+	fmt.Fprintf(os.Stdout, "consumerDetail %+v\n assigneesOAuth2Detail %+v\n err %+v\n", consumerDetail, assigneesOAuth2Detail, err)
 	if consumerDetail == nil {
 		fmt.Fprintf(os.Stderr, "Err: %+v\nTarget user name: %+v\n", err, consumerName)
 
@@ -62,8 +62,9 @@ func (self *OAuth2Controller) Get(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "oauth2.tmpl", gin.H{
-		"error":          false,
-		"consumerDetail": consumerDetail,
+		"error":                 false,
+		"consumerDetail":        consumerDetail,
+		"assigneesOAuth2Detail": assigneesOAuth2Detail,
 	})
 	return
 }

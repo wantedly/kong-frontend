@@ -120,7 +120,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 // oauth2, _, _ := client.OAuth2ConfigService.List("gokun")
 // fmt.Printf("OAuth2:\n%v\n", oauth2)
 
-// targetOAuth2Config, _, _ := client.OAuth2Service.Get("gokun", "86e4f18c-00a6-403f-a526-5d8fc3dac95d")
+// targetOAuth2Config, _, _ := client.OAuth2ConfigService.Get("gokun", "86e4f18c-00a6-403f-a526-5d8fc3dac95d")
 // fmt.Printf("OAuth2:\n%v\n", targetOAuth2Config)
 
 // generateOAuth2Config := &OAuth2Config{

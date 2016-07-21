@@ -42,6 +42,11 @@
             </tbody>
           </table>
       </div>
+      <div class="jumbotron">
+        <h3>Example</h3>
+        <p>shellscript</p>
+        curl -i -X GET --header "Authorization: {{ .assigneesOAuth2Detail.TokenType }}  {{ .assigneesOAuth2Detail.AccessToken }}" --url  https://kong_url/request_path
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>

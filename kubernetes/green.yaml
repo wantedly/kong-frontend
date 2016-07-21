@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: green
+  labels:
+    name: app
+    app: kong-oauth-token-generator
+    color: green
+spec:
+  imagePullSecrets:
+    - name: wantedlybotkey
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      name: green
+      labels:
+        name: app
+        app: kong-oauth-token-generator
+        color: green
+    spec:
+      containers:
+      - image: koudaiii/kong-oauth-token-generator:latest
+        name: green
+        ports:
+          - containerPort: 8080
+            name: go
+        env:
+          - name: KONG_HOST
+            value: kong
+          - name: KONG_PORT
+            value: 8001

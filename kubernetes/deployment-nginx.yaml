@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-proxy
+  labels:
+    app: nginx-proxy
+spec:
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      name: nginx-proxy
+      labels:
+        app: nginx-proxy
+    spec:
+      containers:
+      - name: nginx-proxy
+        image: quay.io/wantedly/nginx-proxy:latest
+        ports:
+          - containerPort: 80
+            containerPort: 8000
+            containerPort: 8090
+        env:
+          - name: APP_URL
+            value: kong-oauth-token-generator
+          - name: APP_PORT
+            value: 8080
+        readinessProbe:
+          httpGet:
+            # Path to probe; should be cheap, but representative of typical behavior
+            path: /status
+            port: 8000
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            # Path to probe; should be cheap, but representative of typical behavior
+            path: /status
+            port: 8000
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        lifecycle:
+          preStop:
+            exec:
+            # SIGTERM triggers a quick exit; gracefully terminate instead
+              command: ["/usr/sbin/nginx","-s","quit"]
+      imagePullSecrets:
+        - name: wantedlybotkey

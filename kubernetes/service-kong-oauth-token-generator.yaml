@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-oauth-token-generator
+  labels:
+    name: app
+    app: kong-oauth-token-generator
+spec:
+  type: NodePort
+  ports:
+    - name: kong-oauth-token-generator
+      port: 8080
+      targetPort: 8080
+  selector:
+    name: app
+    app: kong-oauth-token-generator
+    color: switch

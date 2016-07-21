@@ -29,7 +29,7 @@ func Run(config *config.KongConfiguration) {
 	r.POST("/oauth2s", oauth2Controller.Create)
 	r.GET("/oauth2s/:consumerName", oauth2Controller.Get)
 	r.POST("/oauth2s/:consumerName/delete", oauth2Controller.Delete)
-	r.GET("/new-oauth2", apiController.New)
+	r.GET("/new-oauth2", oauth2Controller.New)
 
 	r.Run()
 }

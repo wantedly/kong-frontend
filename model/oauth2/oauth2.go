@@ -39,10 +39,28 @@ func Delete(self *kong.Client, consumerName string) (string, error) {
 	return message, err
 }
 
-func Create(self *kong.Client, generateConsumer *kong.Consumer) (*kong.Consumer, error) {
+func Create(self *kong.Client, generateConsumer *kong.Consumer) (*kong.Consumer, *kong.AssigneesOAuth2, error) {
 	consumer, _, err := self.ConsumerService.Create(generateConsumer)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return consumer, err
+	generateOAuth2Config := &kong.OAuth2Config{
+		Name:        consumer.Username,
+		RedirectURI: "http://api.wantedly.com",
+	}
+	oauth2, _, err := self.OAuth2ConfigService.Create(generateOAuth2Config, consumer.Username)
+	if err != nil {
+		return nil, nil, err
+	}
+	generateAssigneesOAuth2 := &kong.AssigneesOAuth2{
+		TokenType:    "bearer",
+		ExpiresIn:    0,
+		CredentialID: oauth2.ID,
+	}
+	assigneesOAuth2, _, err := self.AssigneesOAuth2Service.Create(generateAssigneesOAuth2)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return consumer, assigneesOAuth2, err
 }

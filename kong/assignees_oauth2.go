@@ -8,7 +8,7 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/config"
 )
 
-type AssigneesOAuth2List struct {
+type AssigneesOAuth2s struct {
 	AssigneesOAuth2 []AssigneesOAuth2 `json:"data,omitempty"`
 	Total           int               `json:"total,omitempty"`
 }
@@ -50,10 +50,10 @@ func (s *AssigneesOAuth2Service) Get(oauth2ID string) (*AssigneesOAuth2, *http.R
 	return assigneesOAuth2, resp, err
 }
 
-func (s *AssigneesOAuth2Service) List() (*AssigneesOAuth2List, *http.Response, error) {
-	assigneesOAuth2List := new(AssigneesOAuth2List)
-	resp, err := s.sling.New().ReceiveSuccess(assigneesOAuth2List)
-	return assigneesOAuth2List, resp, err
+func (s *AssigneesOAuth2Service) List() (*AssigneesOAuth2s, *http.Response, error) {
+	assigneesOAuth2s := new(AssigneesOAuth2s)
+	resp, err := s.sling.New().ReceiveSuccess(assigneesOAuth2s)
+	return assigneesOAuth2s, resp, err
 }
 
 func (s *AssigneesOAuth2Service) Update(params *AssigneesOAuth2) (*AssigneesOAuth2, *http.Response, error) {

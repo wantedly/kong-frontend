@@ -30,13 +30,13 @@
               <th>RequestPath</th>
               <th>StripRequestPath?</th>
               <th>UpstreamURL</th>
-              <th></th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {{ range .apis }}
             <tr>
-              <td>{{ .ID }}</td>
+              <td><a href="/apis/{{ .Name }}">{{ .ID }}</a></td>
               <td>{{ .Name }}</td>
               <td>{{ .RequestHost }}</td>
               <td>{{ .RequestPath }}</td>

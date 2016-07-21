@@ -10,7 +10,7 @@
     {{ template "navbar" . }}
 
     <div class="container">
-        <h1>API</h1>
+        <h1>API {{ .apiDetail.Name }}</h1>
         <p>
           {{ if .error }}{{ .message }}{{ end }}
         </p>
@@ -25,6 +25,7 @@
                 <th>StripRequestPath?</th>
                 <th>UpstreamURL</th>
                 <th>EnableOauth2</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +37,13 @@
                 <td>{{ .apiDetail.StripRequestPath }}</td>
                 <td>{{ .apiDetail.UpstreamURL }}</td>
                 <td>{{ .enableOAuth2 }}</td>
+                <td>
+                  <form method="POST" action="/apis/{{ .apiDetail.Name }}/delete">
+                    <button type="submit" class="btn btn-danger" onclick='return confirm("Delete {{ .apiDetail.Name }} ?");'>
+                      Delete
+                    </button>
+                  </form>
+                </td>
               </tr>
             </tbody>
           </table>

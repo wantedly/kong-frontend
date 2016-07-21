@@ -32,6 +32,15 @@ func Get(self *kong.Client, consumerName string) (*kong.Consumer, error) {
 	return consumer, err
 }
 
+func Delete(self *kong.Client, consumerName string) (string, error) {
+	consumer, _, err := self.ConsumerService.Get(consumerName)
+	if err != nil {
+		return "", err
+	}
+	message, _, err := self.ConsumerService.Delete(consumer.ID)
+	return message, err
+}
+
 func Create(self *kong.Client, generateConsumer *kong.Consumer) (*kong.Consumer, error) {
 	consumer, _, err := self.ConsumerService.Create(generateConsumer)
 	if err != nil {

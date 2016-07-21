@@ -77,6 +77,21 @@ func (self *OAuth2Controller) New(c *gin.Context) {
 	return
 }
 
+func (self *OAuth2Controller) Delete(c *gin.Context) {
+	consumerName := c.Param("consumerName")
+	message, err := oauth2.Delete(self.Client, consumerName)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "oauth2s.tmpl", gin.H{
+			"error":   true,
+			"err":     fmt.Sprintf("%s", err),
+			"message": fmt.Sprintf("%s", message),
+		})
+	}
+
+	c.Redirect(http.StatusMovedPermanently, "/oauth2s")
+	return
+}
+
 func (self *OAuth2Controller) Create(c *gin.Context) {
 	var form generateOAuth2Params
 	if c.Bind(&form) == nil {
@@ -111,13 +126,9 @@ func (self *OAuth2Controller) Create(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "oauth2.tmpl", gin.H{
-		"error":    false,
-		"consumer": createdConsumer,
-		"message":  fmt.Sprintf("Success"),
+		"error":          false,
+		"consumerDetail": createdConsumer,
+		"message":        fmt.Sprintf("Success"),
 	})
-	return
-}
-
-func (self *OAuth2Controller) Delete(c *gin.Context) {
 	return
 }

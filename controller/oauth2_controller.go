@@ -116,7 +116,7 @@ func (self *OAuth2Controller) Create(c *gin.Context) {
 		Username: form.Username,
 	}
 
-	createdConsumer, err := oauth2.Create(self.Client, generateConsumer)
+	createdConsumer, createdAssigneesOAuth2, err := oauth2.Create(self.Client, generateConsumer)
 	if err != nil {
 		c.HTML(http.StatusServiceUnavailable, "new-oauth2.tmpl", gin.H{
 			"error":   true,
@@ -126,9 +126,10 @@ func (self *OAuth2Controller) Create(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "oauth2.tmpl", gin.H{
-		"error":          false,
-		"consumerDetail": createdConsumer,
-		"message":        fmt.Sprintf("Success"),
+		"error":                 false,
+		"consumerDetail":        createdConsumer,
+		"assigneesOAuth2Detail": createdAssigneesOAuth2,
+		"message":               fmt.Sprintf("Success"),
 	})
 	return
 }

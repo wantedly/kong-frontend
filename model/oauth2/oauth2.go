@@ -59,7 +59,7 @@ func Create(self *kong.Client, generateConsumer *kong.Consumer) (*kong.Consumer,
 	}
 	generateOAuth2Config := &kong.OAuth2Config{
 		Name:        consumer.Username,
-		RedirectURI: "http://api.wantedly.com",
+		RedirectURI: "http://example.com",
 	}
 	oauth2, _, err := self.OAuth2ConfigService.Create(generateOAuth2Config, consumer.Username)
 	if err != nil {

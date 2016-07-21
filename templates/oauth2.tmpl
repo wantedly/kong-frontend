@@ -20,6 +20,8 @@
               <tr>
                 <th>ID</th>
                 <th>Consumer Name</th>
+                <th>Token Type</th>
+                <th>Access Token</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -27,6 +29,8 @@
               <tr>
                 <td>{{ .consumerDetail.ID }}</td>
                 <td>{{ .consumerDetail.Username }}</td>
+                <td>{{ .assigneesOAuth2Detail.TokenType }}</td>
+                <td>{{ .assigneesOAuth2Detail.AccessToken }}</td>
                 <td>
                   <form method="POST" action="/oauth2s/{{ .consumerDetail.Username }}/delete">
                     <button type="submit" class="btn btn-danger" onclick='return confirm("Delete {{ .consumerDetail.Username }} ?");'>

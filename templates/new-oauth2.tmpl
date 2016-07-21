@@ -10,14 +10,14 @@
     {{ template "navbar" . }}
 
     <div class="container">
-      <h1>API</h1>
+      <h1>New OAuth2</h1>
       <p>
         {{ if .error }}{{ .message }}{{ end }}
       </p>
       <form class="" action="/oauth2s" method="post">
         <div class="form-group">
-          <label for="name">User Name:</label>
-          <input type="text" class="form-control" name="userName" placeholder="userName">
+          <label for="name">Consumer Name:</label>
+          <input type="text" class="form-control" name="userName" placeholder="ex: visit">
         </div>
         <button type="submit" class="btn btn-primary btn-lg">Submit</button>
       </form>

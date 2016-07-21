@@ -6,7 +6,8 @@ metadata:
     app: nginx-proxy
 spec:
   ports:
-    - port: 80
+    - port: 443
+      targetPort: 80
   selector:
     app: nginx-proxy
   type: LoadBalancer

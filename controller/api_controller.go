@@ -10,7 +10,7 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/model/api"
 )
 
-type Params struct {
+type generateAPIParams struct {
 	Name             string `form:"name" json:"name" binding:"required"`
 	UpstreamURL      string `form:"upstream_url" json:"upstream_url" binding:"required"`
 	RequestPath      string `form:"request_path" json:"request_path" binding:"required"`
@@ -99,7 +99,7 @@ func (self *APIController) Delete(c *gin.Context) {
 }
 
 func (self *APIController) Create(c *gin.Context) {
-	var form Params
+	var form generateAPIParams
 	enableOAuth2 := false
 	if c.Bind(&form) == nil {
 		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)

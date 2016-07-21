@@ -6,8 +6,9 @@ import (
 	"github.com/koudaiii/kong-oauth-token-generator/kong"
 )
 
-func List(self *kong.Client) (*kong.APIs, *kong.AssigneesOAuth2List, error) {
-	apis, _, err := self.APIService.List()
+func List(self *kong.Client) (*kong.Consumers, *kong.AssigneesOAuth2s, error) {
+	consumers, _, err := self.ConsumerService.List()
 	assignees, _, err := self.AssigneesOAuth2Service.List()
-	return apis, assignees, err
+
+	return consumers, assignees, err
 }

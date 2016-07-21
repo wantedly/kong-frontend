@@ -24,13 +24,12 @@ func NewOAuth2Controller(client *kong.Client) *OAuth2Controller {
 }
 
 func (self *OAuth2Controller) Index(c *gin.Context) {
-	consumers, assignees, err := oauth2.List(self.Client)
+	consumers, err := oauth2.List(self.Client)
 	c.HTML(http.StatusOK, "oauth2s.tmpl", gin.H{
 		"alert":     false,
 		"error":     false,
 		"message":   "",
 		"consumers": consumers.Consumer,
-		"assignees": assignees.AssigneesOAuth2,
 		"total":     consumers.Total,
 		"err":       err,
 	})

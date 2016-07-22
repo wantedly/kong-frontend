@@ -3,12 +3,10 @@ kind: Deployment
 metadata:
   name: green
   labels:
-    name: app
-    app: kong-oauth-token-generator
+    app: kong
+    name: oauth-token-generator
     color: green
 spec:
-  imagePullSecrets:
-    - name: wantedlybotkey
   minReadySeconds: 30
   strategy:
     type: RollingUpdate
@@ -17,18 +15,20 @@ spec:
     metadata:
       name: green
       labels:
-        name: app
-        app: kong-oauth-token-generator
+        app: kong
+        name: oauth-token-generator
         color: green
     spec:
+      imagePullSecrets:
+        - name: wantedlybotkey
       containers:
-      - image: koudaiii/kong-oauth-token-generator:latest
+      - image: quay.io/wantedly/kong-oauth-token-generator:latest
         name: green
         ports:
           - containerPort: 8080
             name: go
         env:
           - name: KONG_HOST
-            value: kong
+            value: kong-internal
           - name: KONG_PORT
-            value: 8001
+            value: "8001"

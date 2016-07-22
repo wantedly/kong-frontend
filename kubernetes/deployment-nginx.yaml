@@ -24,9 +24,9 @@ spec:
             containerPort: 8090
         env:
           - name: APP_URL
-            value: kong-oauth-token-generator
+            value: oauth-token-generator
           - name: APP_PORT
-            value: 8080
+            value: "8080"
         readinessProbe:
           httpGet:
             # Path to probe; should be cheap, but representative of typical behavior

@@ -1,4 +1,4 @@
-package: github.com/koudaiii/kong-oauth-token-generator
+package: github.com/wantedly/kong-oauth-token-generator
 import:
 - package: github.com/fabiorphp/kongo
 - package: github.com/gin-gonic/gin

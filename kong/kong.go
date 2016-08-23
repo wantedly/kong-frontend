@@ -4,7 +4,7 @@ import (
 	_ "fmt"
 	"net/http"
 
-	"github.com/koudaiii/kong-oauth-token-generator/config"
+	"github.com/wantedly/kong-oauth-token-generator/config"
 )
 
 // Client is kong client
@@ -40,7 +40,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 
 //	generateAPI := &API{
 //		Name:             "sakabe",
-//		UpstreamURL:      "http://koudaiii.com",
+//		UpstreamURL:      "http://wantedly.com",
 //		RequestHost:      "test.com",
 //		StripRequestPath: true,
 //	}
@@ -50,7 +50,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 //	updateAPI := &API{
 //		ID:               api.ID,
 //		Name:             "sakabeupdate",
-//		UpstreamURL:      "http://koudaiii.com",
+//		UpstreamURL:      "http://wantedly.com",
 //		RequestHost:      "test.com",
 //		StripRequestPath: true,
 //	}
@@ -125,7 +125,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 
 // generateOAuth2Config := &OAuth2Config{
 // 	Name:        "sakabe site",
-// 	RedirectURI: "http://koudaiii.com",
+// 	RedirectURI: "http://wantedly.com",
 // }
 
 // oauth2config, resp, err := client.OAuth2ConfigService.Create(generateOAuth2Config, "gokun")

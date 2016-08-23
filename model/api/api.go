@@ -4,7 +4,7 @@ import (
 	_ "fmt"
 	_ "os"
 
-	"github.com/koudaiii/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-oauth-token-generator/kong"
 )
 
 type API struct {

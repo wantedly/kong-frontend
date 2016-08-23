@@ -39,8 +39,8 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 //	fmt.Printf("API:\n%v\n", api)
 
 //	generateAPI := &API{
-//		Name:             "sakabe",
-//		UpstreamURL:      "http://wantedly.com",
+//		Name:             "wantedly",
+//		UpstreamURL:      "http://www.wantedly.com",
 //		RequestHost:      "test.com",
 //		StripRequestPath: true,
 //	}
@@ -49,8 +49,8 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 
 //	updateAPI := &API{
 //		ID:               api.ID,
-//		Name:             "sakabeupdate",
-//		UpstreamURL:      "http://wantedly.com",
+//		Name:             "updatewantedly",
+//		UpstreamURL:      "http://www.wantedly.com",
 //		RequestHost:      "test.com",
 //		StripRequestPath: true,
 //	}
@@ -100,7 +100,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 //	fmt.Printf("Consumer:\n%v\n", consumer)
 
 //	generateConsumer := &Consumer{
-//		Username: "sakabe",
+//		Username: "wantedly",
 //	}
 
 //	consumer, resp, err := client.ConsumerService.Create(generateConsumer)
@@ -108,7 +108,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 
 //	updateConsumer := &Consumer{
 //		ID:       consumer.ID,
-//		Username: "sakabeupdate",
+//		Username: "updatewantedly",
 //	}
 
 //	updatedConsumer, resp, err := client.ConsumerService.Update(updateConsumer)
@@ -124,8 +124,8 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 // fmt.Printf("OAuth2:\n%v\n", targetOAuth2Config)
 
 // generateOAuth2Config := &OAuth2Config{
-// 	Name:        "sakabe site",
-// 	RedirectURI: "http://wantedly.com",
+// 	Name:        "wantedly site",
+// 	RedirectURI: "http://www.wantedly.com",
 // }
 
 // oauth2config, resp, err := client.OAuth2ConfigService.Create(generateOAuth2Config, "gokun")
@@ -133,7 +133,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 
 // updateOAuth2Config := &OAuth2Config{
 // 	ID:   oauth2config.ID,
-// 	Name: "sakabeupdate",
+// 	Name: "updatewantedly",
 // }
 
 // updatedOAuth2Config, resp, err := client.OAuth2ConfigService.Update(updateOAuth2Config, "gokun")

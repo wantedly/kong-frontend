@@ -15,7 +15,7 @@ LDFLAGS := -ldflags="-w -X \"main.Version=$(VERSION)\" -X \"main.Revision=$(REVI
 GLIDE := glide
 GLIDE_VERSION := 0.10.2
 
-DOCKER_IMAGE_NAME := koudaiii/kong-oauth-token-generator
+DOCKER_IMAGE_NAME := wantedly/kong-oauth-token-generator
 DOCKER_IMAGE_TAG := $(VERSION)
 DOCKER_IMAGE := $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
 

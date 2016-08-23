@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/koudaiii/kong-oauth-token-generator/kong"
-	"github.com/koudaiii/kong-oauth-token-generator/model/api"
+	"github.com/wantedly/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-oauth-token-generator/model/api"
 )
 
 type generateAPIParams struct {

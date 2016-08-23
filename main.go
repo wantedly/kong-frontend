@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/koudaiii/kong-oauth-token-generator/config"
-	"github.com/koudaiii/kong-oauth-token-generator/server"
+	"github.com/wantedly/kong-oauth-token-generator/config"
+	"github.com/wantedly/kong-oauth-token-generator/server"
 )
 
 func main() {

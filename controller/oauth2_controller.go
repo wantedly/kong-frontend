@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/koudaiii/kong-oauth-token-generator/model/oauth2"
+	"github.com/wantedly/kong-oauth-token-generator/model/oauth2"
 
 	"github.com/gin-gonic/gin"
-	"github.com/koudaiii/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-oauth-token-generator/kong"
 )
 
 type generateOAuth2Params struct {

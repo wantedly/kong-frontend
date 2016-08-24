@@ -131,7 +131,7 @@ func (self *APIController) Create(c *gin.Context) {
 
 	generatePlugin := &kong.Plugin{
 		Name: "oauth2",
-		Config: kong.PluginConfig{
+		Config: kong.OAuth2PluginConfig{
 			EnableClientCredentials: true,
 		},
 	}

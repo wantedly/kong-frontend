@@ -3,6 +3,7 @@ package kong
 import (
 	_ "fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/dghubble/sling"
 	"github.com/wantedly/kong-oauth-token-generator/config"
@@ -14,24 +15,16 @@ type Plugins struct {
 }
 
 type Plugin struct {
-	APIID     string       `json:"api_id,omitempty"`
-	Config    PluginConfig `json:"config,omitempty"`
-	CreatedAt int          `json:"created_at,omitempty"`
-	Enabled   bool         `json:"enabled,omitempty"`
-	ID        string       `json:"id,omitempty"`
-	Name      string       `json:"name,omitempty"`
+	APIID     string      `json:"api_id,omitempty"`
+	Config    interface{} `json:"config,omitempty"`
+	CreatedAt int         `json:"created_at,omitempty"`
+	Enabled   bool        `json:"enabled,omitempty"`
+	ID        string      `json:"id,omitempty"`
+	Name      string      `json:"name,omitempty"`
 }
 
-type PluginConfig struct {
-	AcceptHTTPIfAlreadyTerminated bool   `json:"accept_http_if_already_terminated,omitempty"`
-	EnableAuthorizationCode       bool   `json:"enable_authorization_code,omitempty"`
-	EnableClientCredentials       bool   `json:"enable_client_credentials,omitempty"`
-	EnableImplicitGrant           bool   `json:"enable_implicit_grant,omitempty"`
-	EnablePasswordGrant           bool   `json:"enable_password_grant,omitempty"`
-	HideCredentials               bool   `json:"hide_credentials,omitempty"`
-	MandatoryScope                bool   `json:"mandatory_scope,omitempty"`
-	ProvisionKey                  string `json:"provision_key,omitempty"`
-	TokenExpiration               int    `json:"token_expiration,omitempty"`
+type PluginConfigList struct {
+	OAuth2 OAuth2PluginConfig `name:"oauth2"`
 }
 
 type EnabledPlugin struct {
@@ -88,4 +81,15 @@ func (s *PluginService) Delete(pluginID string, apiName string) (string, *http.R
 	var message string
 	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "apis/" + apiName + "/plugins/" + pluginID).ReceiveSuccess(message)
 	return message, resp, err
+}
+
+func GetPluginList() []string {
+	result := []string{}
+	instance := &PluginConfigList{}
+	types := reflect.TypeOf(*instance)
+	for i := 0; i < types.NumField(); i++ {
+		field := types.Field(i)
+		result = append(result, field.Tag.Get("name"))
+	}
+	return result
 }

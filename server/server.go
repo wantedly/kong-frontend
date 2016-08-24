@@ -16,6 +16,7 @@ func Run(config *config.KongConfiguration) {
 	client := kong.NewClient(nil, config)
 	apiController := controller.NewAPIController(client)
 	oauth2Controller := controller.NewOAuth2Controller(client)
+	pluginController := controller.NewPluginController(client)
 
 	r.GET("/", apiController.Index)
 
@@ -30,6 +31,12 @@ func Run(config *config.KongConfiguration) {
 	r.GET("/oauth2s/:consumerName", oauth2Controller.Get)
 	r.POST("/oauth2s/:consumerName/delete", oauth2Controller.Delete)
 	r.GET("/new-oauth2", oauth2Controller.New)
+
+	r.GET("/apis/:apiName/plugins", pluginController.Index)
+	r.POST("/apis/:apiName/plugins", pluginController.Create)
+	r.GET("/apis/:apiName/plugins/:pluginID", pluginController.Get)
+	r.POST("/apis/:apiName/plugins/:pluginID/delete", pluginController.Delete)
+	r.GET("/apis/:apiName/new-plugin", pluginController.New)
 
 	r.Run()
 }

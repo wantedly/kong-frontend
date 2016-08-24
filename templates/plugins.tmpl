@@ -10,7 +10,7 @@
     {{ template "navbar" . }}
     <div class="container">
       <h1>Plugin
-        <a class="btn btn-success btn-lg" href="/api/{{ .apiName }}/new-plugin" role="button">New</a>
+        <a class="btn btn-success btn-lg" href="/apis/{{ .apiName }}/new-plugin" role="button">New</a>
       </h1>
       <p>
         {{ if .error }}{{ .err }}{{ end }}

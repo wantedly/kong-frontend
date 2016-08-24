@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ .pluginDetail.Name }}</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/octicons.css">
+  </head>
+  <body>
+    {{ template "navbar" . }}
+
+    <div class="container">
+        <h1>Plugin {{ .pluginDetail.Name }}</h1>
+        <p>
+          {{ if .error }}{{ .message }}{{ end }}
+        </p>
+        <div class="panel panel-default">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>API Name</th>
+                <th>Name</th>
+                <th>Enabled</th>
+                <th>Config</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ .pluginDetail.ID }}</td>
+                <td><a href="/apis/{{ .apiName }}">{{ .apiName }}</a></td>
+                <td>{{ .pluginDetail.Name }}</td>
+                <td>{{ .pluginDetail.Enabled }}</td>
+                <td>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{ range $key, $value := .pluginDetail.Config }}
+                      <tr>
+                        <th>{{ $key }}</th>
+                        <td>{{ $value }}</td>
+                      </tr>
+                     {{ end }}
+                   </tbody>
+                  </table>
+                </td>
+                <td>
+                  <form method="POST" action="/apis/{{ .apiName }}/plugins/{{ .pluginDetail.Name }}/delete">
+                    <button type="submit" class="btn btn-danger" onclick='return confirm("Delete {{ .pluginDetail.Name }} ?");'>
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </body>
+</html>

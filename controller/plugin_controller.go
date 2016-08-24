@@ -94,6 +94,17 @@ func (self *PluginController) Get(c *gin.Context) {
 	return
 }
 
+func (self *PluginController) New(c *gin.Context) {
+	apiName := c.Param("apiName")
+	c.HTML(http.StatusOK, "new-plugin.tmpl", gin.H{
+		"alert":   false,
+		"error":   false,
+		"apiName":      apiName,
+		"message": "",
+	})
+	return
+}
+
 func (self *PluginController) Delete(c *gin.Context) {
 	apiName := c.Param("apiName")
 	pluginID := c.Param("pluginID")

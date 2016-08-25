@@ -16,6 +16,16 @@ type Plugin struct {
 	Name      string      `json:"name,omitempty"`
 }
 
+func EnabledPlugins(self *kong.Client) (*kong.EnabledPlugin, error) {
+	plugins, _, err := self.PluginService.GetEnabledPlugins()
+	return plugins, err
+}
+
+func Schema(self *kong.Client, name string) (*kong.PluginSchema, error) {
+	schema, _, err := self.PluginService.GetPluginSchema(name)
+	return schema, err
+}
+
 func List(self *kong.Client, apiName string) (*kong.Plugins, error) {
 	plugins, _, err := self.PluginService.List(apiName)
 	return plugins, err

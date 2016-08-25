@@ -15,6 +15,11 @@ type PluginController struct {
 	Client *kong.Client
 }
 
+type newPluginFormBody struct {
+	Name       string `form:"name" json:"name" binding:"required"`
+	ConsumerID string `form:"consumer_id" json:"name" binding:"omitempty"`
+}
+
 func NewPluginController(client *kong.Client) *PluginController {
 	return &PluginController{client}
 }
@@ -90,11 +95,18 @@ func (self *PluginController) Get(c *gin.Context) {
 
 func (self *PluginController) New(c *gin.Context) {
 	apiName := c.Param("apiName")
+	plugins, err := plugin.EnabledPlugins(self.Client)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "new-plugin.tmpl", gin.H{
+			"error":   true,
+			"message": "Failed to get enabled plugin list.",
+		})
+	}
 	c.HTML(http.StatusOK, "new-plugin.tmpl", gin.H{
 		"alert":   false,
 		"error":   false,
 		"apiName": apiName,
-		"plugins": kong.GetPluginList(),
+		"plugins": plugins.EnabledPlugins,
 		"message": "",
 	})
 	return
@@ -102,7 +114,7 @@ func (self *PluginController) New(c *gin.Context) {
 
 func (self *PluginController) Config(c *gin.Context) {
 	apiName := c.Param("apiName")
-	var form kong.GeneratePluginParams
+	var form newPluginFormBody
 	if c.Bind(&form) == nil {
 		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)
 		fmt.Fprintf(os.Stdout, "consumer_id %+v\n", form.ConsumerID)
@@ -113,14 +125,16 @@ func (self *PluginController) Config(c *gin.Context) {
 		})
 		return
 	}
+	schema, _ := plugin.Schema(self.Client, form.Name)
 	c.HTML(http.StatusOK, "new-plugin-config.tmpl", gin.H{
-		"alert":        false,
-		"error":        false,
-		"apiName":      apiName,
-		"pluginName":   form.Name,
-		"consumerID":   form.ConsumerID,
-		"pluginConfig": kong.GetPluginList()[form.Name],
-		"message":      "",
+		"alert":      false,
+		"error":      false,
+		"apiName":    apiName,
+		"consumerID": form.ConsumerID,
+		"pluginName": form.Name,
+		"noConsumer": schema.NoConsumer,
+		"fields":     schema.Fields,
+		"message":    "",
 	})
 	return
 }
@@ -143,6 +157,59 @@ func (self *PluginController) Delete(c *gin.Context) {
 }
 
 func (self *PluginController) Create(c *gin.Context) {
+	apiName := c.Param("apiName")
+	pluginName, _ := c.GetQuery("name")
+	consumerID, _ := c.GetQuery("consumer_id")
+	schema, _ := plugin.Schema(self.Client, pluginName)
+	form := map[string]string{}
+	for key, field := range schema.Fields {
+		value, ok := c.GetPostForm(key)
+		if !ok {
+			if !field.Required {
+				continue
+			}
+			if field.Type == "boolean" {
+				if field.Default == true {
+					value = "true"
+				} else {
+					value = "false"
+				}
+			} else {
+				value = field.Default.(string)
+			}
+		} else if value == "" {
+			if !field.Required {
+				continue
+			}
+			value = field.Default.(string)
+		}
+		form[key] = value
+	}
+	fmt.Printf("config: %#v\n", form)
+	params := kong.GeneratePluginParams{
+		Name:       pluginName,
+		ConsumerID: consumerID,
+		Config:     form,
+	}
+	createdPlugin, err := plugin.Create(self.Client, apiName, &params)
+	if err != nil {
+		c.HTML(http.StatusServiceUnavailable, "new-plugin.tmpl", gin.H{
+			"error":   true,
+			"message": fmt.Sprintf("Please Check kong: %s", err),
+		})
+		return
+	}
+
+	c.HTML(http.StatusOK, "plugin.tmpl", gin.H{
+		"error":        false,
+		"pluginDetail": createdPlugin,
+		"apiName":      apiName,
+		"message":      fmt.Sprintf("Success"),
+	})
+	return
+}
+
+func (self *PluginController) Create2(c *gin.Context) {
 	apiName := c.Param("apiName")
 	pluginName, _ := c.GetQuery("name")
 	consumerID, _ := c.GetQuery("consumer_id")

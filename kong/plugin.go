@@ -25,12 +25,24 @@ type Plugin struct {
 }
 
 type PluginConfigList struct {
-	OAuth2 OAuth2PluginConfig `name:"oauth2"`
+	OAuth2       OAuth2PluginConfig       `name:"oauth2"`
 	RateLimiting RateLimitingPluginConfig `name:"rate-limiting"`
 }
 
 type EnabledPlugin struct {
 	EnabledPlugins []string `json:"enabled_plugins"`
+}
+
+type PluginSchema struct {
+	Fields     map[string]PluginSchemaField `json:"fields"`
+	NoConsumer bool                         `json:"no_consumer,omitempty"`
+}
+
+type PluginSchemaField struct {
+	Type     string      `json:"type"`
+	Required bool        `json:"required,omitempty"`
+	Func     string      `json:"func,omitempty"`
+	Default  interface{} `json:"default,omitempty"`
 }
 
 // Services
@@ -59,6 +71,12 @@ func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, err
 	plugins := new(EnabledPlugin)
 	resp, err := s.sling.New().Get(s.config.KongAdminURL + "plugins/enabled").ReceiveSuccess(plugins)
 	return plugins, resp, err
+}
+
+func (s *PluginService) GetPluginSchema(name string) (*PluginSchema, *http.Response, error) {
+	schema := new(PluginSchema)
+	resp, err := s.sling.New().Get(s.config.KongAdminURL + "plugins/schema/" + name).ReceiveSuccess(schema)
+	return schema, resp, err
 }
 
 func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {

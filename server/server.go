@@ -37,6 +37,7 @@ func Run(config *config.KongConfiguration) {
 	r.GET("/apis/:apiName/plugins/:pluginID", pluginController.Get)
 	r.POST("/apis/:apiName/plugins/:pluginID/delete", pluginController.Delete)
 	r.GET("/apis/:apiName/new-plugin", pluginController.New)
+	r.POST("/apis/:apiName/new-plugin", pluginController.Config)
 
 	r.Run()
 }

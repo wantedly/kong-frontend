@@ -10,4 +10,5 @@ type OAuth2PluginConfig struct {
 	MandatoryScope                bool   `form:"mandatory_scope" json:"mandatory_scope,omitempty"`
 	ProvisionKey                  string `form:"provision_key" json:"provision_key,omitempty"`
 	TokenExpiration               int    `form:"token_expiration" json:"token_expiration,omitempty"`
+	Scopes                        string `form:"scopes" json:"scopes,omitempty"`
 }

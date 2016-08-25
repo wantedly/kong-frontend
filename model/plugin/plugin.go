@@ -57,7 +57,7 @@ func Delete(self *kong.Client, apiName, pluginID string) (string, error) {
 }
 
 func Create(self *kong.Client, apiName string, generatePlugin *kong.GeneratePluginParams) (*kong.Plugin, error) {
-	plugin, _, err := self.PluginService.Create2(generatePlugin, apiName)
+	plugin, _, err := self.PluginService.Create(generatePlugin, apiName)
 	if err != nil {
 		return nil, err
 	}

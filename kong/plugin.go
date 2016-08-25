@@ -3,8 +3,6 @@ package kong
 import (
 	_ "fmt"
 	"net/http"
-	"reflect"
-	"strings"
 
 	"github.com/dghubble/sling"
 	"github.com/wantedly/kong-oauth-token-generator/config"
@@ -22,11 +20,6 @@ type Plugin struct {
 	Enabled   bool        `json:"enabled,omitempty"`
 	ID        string      `json:"id,omitempty"`
 	Name      string      `json:"name,omitempty"`
-}
-
-type PluginConfigList struct {
-	OAuth2       OAuth2PluginConfig       `name:"oauth2"`
-	RateLimiting RateLimitingPluginConfig `name:"rate-limiting"`
 }
 
 type EnabledPlugin struct {
@@ -113,49 +106,4 @@ func (s *PluginService) Delete(pluginID string, apiName string) (string, *http.R
 	var message string
 	resp, err := s.sling.New().Delete(s.config.KongAdminURL + "apis/" + apiName + "/plugins/" + pluginID).ReceiveSuccess(message)
 	return message, resp, err
-}
-
-func GetPluginConfig(name string) interface{} {
-	instance := &PluginConfigList{}
-	types := reflect.TypeOf(*instance)
-	for i := 0; i < types.NumField(); i++ {
-		field := types.Field(i)
-		if name == field.Tag.Get("name") {
-			return reflect.New(field.Type).Interface()
-		}
-	}
-	return nil
-}
-
-func GetPluginList() map[string]map[string]string {
-	result := map[string]map[string]string{}
-	instance := &PluginConfigList{}
-	types := reflect.TypeOf(*instance)
-	config := reflect.ValueOf(*instance)
-	for i := 0; i < types.NumField(); i++ {
-		field := types.Field(i)
-		name := field.Tag.Get("name")
-		result[name] = GetFieldTypes(config.Field(i).Interface())
-	}
-	return result
-}
-
-func GetFieldTypes(instance interface{}) map[string]string {
-	result := map[string]string{}
-	types := reflect.TypeOf(instance)
-	values := reflect.ValueOf(instance)
-	for i := 0; i < types.NumField(); i++ {
-		field := types.Field(i)
-		value := values.Field(i).Interface()
-		tag := field.Tag.Get("json")
-		name := strings.SplitN(tag, ",", 2)[0]
-		if value == false {
-			result[name] = "checkbox"
-		} else if value == 0 {
-			result[name] = "number"
-		} else {
-			result[name] = "text"
-		}
-	}
-	return result
 }

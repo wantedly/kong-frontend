@@ -26,6 +26,7 @@ type Plugin struct {
 
 type PluginConfigList struct {
 	OAuth2 OAuth2PluginConfig `name:"oauth2"`
+	RateLimiting RateLimitingPluginConfig `name:"rate-limiting"`
 }
 
 type EnabledPlugin struct {

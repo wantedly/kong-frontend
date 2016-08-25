@@ -1,7 +1,7 @@
 version: '2'
 services:
   kong-oauth-token-generator:
-    image: wantedly/kong-oauth-token-generator
+    image: quay.io/wantedly/kong-oauth-token-generator
     depends_on:
       - kong
     environment:

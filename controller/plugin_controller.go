@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wantedly/kong-oauth-token-generator/kong"
 	"github.com/wantedly/kong-oauth-token-generator/model/api"
+	"github.com/wantedly/kong-oauth-token-generator/model/oauth2"
 	"github.com/wantedly/kong-oauth-token-generator/model/plugin"
 )
 
@@ -17,7 +18,6 @@ type PluginController struct {
 
 type newPluginFormBody struct {
 	Name       string `form:"name" json:"name" binding:"required"`
-	ConsumerID string `form:"consumer_id" json:"name" binding:"omitempty"`
 }
 
 func NewPluginController(client *kong.Client) *PluginController {
@@ -101,6 +101,7 @@ func (self *PluginController) New(c *gin.Context) {
 			"error":   true,
 			"message": "Failed to get enabled plugin list.",
 		})
+		return
 	}
 	c.HTML(http.StatusOK, "new-plugin.tmpl", gin.H{
 		"alert":   false,
@@ -114,10 +115,17 @@ func (self *PluginController) New(c *gin.Context) {
 
 func (self *PluginController) Config(c *gin.Context) {
 	apiName := c.Param("apiName")
+	consumers, err := oauth2.List(self.Client)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "new-plugin.tmpl", gin.H{
+			"error":   true,
+			"message": "Failed to get consumers.",
+		})
+		return
+	}
 	var form newPluginFormBody
 	if c.Bind(&form) == nil {
 		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)
-		fmt.Fprintf(os.Stdout, "consumer_id %+v\n", form.ConsumerID)
 	} else {
 		c.HTML(http.StatusBadRequest, "new-plugin.tmpl", gin.H{
 			"error":   true,
@@ -130,7 +138,7 @@ func (self *PluginController) Config(c *gin.Context) {
 		"alert":      false,
 		"error":      false,
 		"apiName":    apiName,
-		"consumerID": form.ConsumerID,
+		"consumers":  consumers.Consumer,
 		"pluginName": form.Name,
 		"noConsumer": schema.NoConsumer,
 		"fields":     schema.Fields,
@@ -158,8 +166,8 @@ func (self *PluginController) Delete(c *gin.Context) {
 
 func (self *PluginController) Create(c *gin.Context) {
 	apiName := c.Param("apiName")
-	pluginName, _ := c.GetQuery("name")
-	consumerID, _ := c.GetQuery("consumer_id")
+	pluginName, _ := c.GetPostForm("plugin_name")
+	consumerID, _ := c.GetPostForm("plugin_consumer_id")
 	schema, _ := plugin.Schema(self.Client, pluginName)
 	form := map[string]string{}
 	for key, field := range schema.Fields {

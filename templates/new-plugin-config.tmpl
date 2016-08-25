@@ -14,19 +14,20 @@
       <p>
         {{ if .error }}{{ .message }}{{ end }}
       </p>
-      {{ if .noConsumer }}
-      <form action="/apis/{{ .apiName }}/plugins?name={{ .pluginName }}" method="post">
-      {{ else }}
-      <form action="/apis/{{ .apiName }}/plugins?name={{ .pluginName }}&consumer_id={{ .consumerID }}" method="post">
-      {{ end }}
+      <form action="/apis/{{ .apiName }}/plugins/" method="post">
         <div class="form-group">
           <label>NAME:</label>
-          <input type="text" class="form-control" value="{{ .pluginName }}" readonly>
+          <input type="text" class="form-control" name="plugin_name" value="{{ .pluginName }}" readonly>
         </div>
         {{ if not .noConsumer }}
         <div class="form-group">
-          <label>Consumer ID:</label>
-          <input type="text" class="form-control" value="{{ .consumerID }}">
+          <label>CONSUMER:</label>
+          <select class="form-control" name="plugin_consumer_id">
+            <option value=""></option>
+            {{ range .consumers }}
+            <option value="{{ .ID }}">{{ .Username }}</option>
+            {{ end }}
+          </select>
         </div>
         {{ end }}
         {{ range $key, $field := .fields }}

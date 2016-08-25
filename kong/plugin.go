@@ -4,6 +4,7 @@ import (
 	_ "fmt"
 	"net/http"
 	"reflect"
+	"strings"
 
 	"github.com/dghubble/sling"
 	"github.com/wantedly/kong-oauth-token-generator/config"
@@ -39,6 +40,12 @@ type PluginService struct {
 	config *config.KongConfiguration
 }
 
+type GeneratePluginParams struct {
+	Name       string      `form:"name" json:"name" binding:"required"`
+	ConsumerID string      `form:"consumer_id" json:"consumer_id,omitempty" binding:"omitempty"`
+	Config     interface{} `form:"config" json:"config" binding:"omitempty"`
+}
+
 // NewPluginService returns a new PluginService.
 func NewPluginService(httpClient *http.Client, config *config.KongConfiguration) *PluginService {
 	return &PluginService{
@@ -54,6 +61,12 @@ func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, err
 }
 
 func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
+	plugin := new(Plugin)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
+	return plugin, resp, err
+}
+
+func (s *PluginService) Create2(params *GeneratePluginParams, apiName string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
 	resp, err := s.sling.New().Post(s.config.KongAdminURL + "apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
 	return plugin, resp, err
@@ -83,13 +96,47 @@ func (s *PluginService) Delete(pluginID string, apiName string) (string, *http.R
 	return message, resp, err
 }
 
-func GetPluginList() []string {
-	result := []string{}
+func GetPluginConfig(name string) interface{} {
 	instance := &PluginConfigList{}
 	types := reflect.TypeOf(*instance)
 	for i := 0; i < types.NumField(); i++ {
 		field := types.Field(i)
-		result = append(result, field.Tag.Get("name"))
+		if name == field.Tag.Get("name") {
+			return reflect.New(field.Type).Interface()
+		}
+	}
+	return nil
+}
+
+func GetPluginList() map[string]map[string]string {
+	result := map[string]map[string]string{}
+	instance := &PluginConfigList{}
+	types := reflect.TypeOf(*instance)
+	config := reflect.ValueOf(*instance)
+	for i := 0; i < types.NumField(); i++ {
+		field := types.Field(i)
+		name := field.Tag.Get("name")
+		result[name] = GetFieldTypes(config.Field(i).Interface())
+	}
+	return result
+}
+
+func GetFieldTypes(instance interface{}) map[string]string {
+	result := map[string]string{}
+	types := reflect.TypeOf(instance)
+	values := reflect.ValueOf(instance)
+	for i := 0; i < types.NumField(); i++ {
+		field := types.Field(i)
+		value := values.Field(i).Interface()
+		tag := field.Tag.Get("json")
+		name := strings.SplitN(tag, ",", 2)[0]
+		if value == false {
+			result[name] = "checkbox"
+		} else if value == 0 {
+			result[name] = "number"
+		} else {
+			result[name] = "text"
+		}
 	}
 	return result
 }

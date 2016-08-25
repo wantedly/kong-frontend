@@ -11,12 +11,6 @@ import (
 	"github.com/wantedly/kong-oauth-token-generator/model/plugin"
 )
 
-type generatePluginParams struct {
-	Name       string      `form:"name" json:"name" binding:"required"`
-	ConsumerID string      `form:"consumer_id" json:"consumer_id" binding:"omitempty"`
-	Config     interface{} `form:"config" json:"config" binding:"required"`
-}
-
 type PluginController struct {
 	Client *kong.Client
 }
@@ -99,8 +93,34 @@ func (self *PluginController) New(c *gin.Context) {
 	c.HTML(http.StatusOK, "new-plugin.tmpl", gin.H{
 		"alert":   false,
 		"error":   false,
-		"apiName":      apiName,
+		"apiName": apiName,
+		"plugins": kong.GetPluginList(),
 		"message": "",
+	})
+	return
+}
+
+func (self *PluginController) Config(c *gin.Context) {
+	apiName := c.Param("apiName")
+	var form kong.GeneratePluginParams
+	if c.Bind(&form) == nil {
+		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)
+		fmt.Fprintf(os.Stdout, "consumer_id %+v\n", form.ConsumerID)
+	} else {
+		c.HTML(http.StatusBadRequest, "new-plugin.tmpl", gin.H{
+			"error":   true,
+			"message": fmt.Sprintf("Please fix params"),
+		})
+		return
+	}
+	c.HTML(http.StatusOK, "new-plugin-config.tmpl", gin.H{
+		"alert":        false,
+		"error":        false,
+		"apiName":      apiName,
+		"pluginName":   form.Name,
+		"consumerID":   form.ConsumerID,
+		"pluginConfig": kong.GetPluginList()[form.Name],
+		"message":      "",
 	})
 	return
 }
@@ -124,11 +144,14 @@ func (self *PluginController) Delete(c *gin.Context) {
 
 func (self *PluginController) Create(c *gin.Context) {
 	apiName := c.Param("apiName")
-	var form generatePluginParams
-	if c.Bind(&form) == nil {
-		fmt.Fprintf(os.Stdout, "name %+v\n", form.Name)
-		fmt.Fprintf(os.Stdout, "consumer_id %+v\n", form.ConsumerID)
-		fmt.Fprintf(os.Stdout, "config %+v\n", form.Config)
+	pluginName, _ := c.GetQuery("name")
+	consumerID, _ := c.GetQuery("consumer_id")
+	form := kong.GetPluginConfig(pluginName)
+	fmt.Fprintf(os.Stdout, "config %#v\n", form)
+	if c.Bind(form) == nil {
+		fmt.Fprintf(os.Stdout, "name %+v\n", pluginName)
+		fmt.Fprintf(os.Stdout, "consumer_id %+v\n", consumerID)
+		fmt.Fprintf(os.Stdout, "config %+v\n", form)
 	} else {
 		c.HTML(http.StatusBadRequest, "new-plugin.tmpl", gin.H{
 			"error":   true,
@@ -137,20 +160,12 @@ func (self *PluginController) Create(c *gin.Context) {
 		return
 	}
 
-	if plugin.Exists(self.Client, apiName, form.Name) {
-		c.HTML(http.StatusConflict, "new-plugin.tmpl", gin.H{
-			"error":   true,
-			"message": fmt.Sprintf("Plugin %s already exist.", form.Name),
-		})
-		return
+	params := kong.GeneratePluginParams{
+		Name:       pluginName,
+		ConsumerID: consumerID,
+		Config:     form,
 	}
-
-	generatePlugin := &kong.Plugin{
-		Name:   form.Name,
-		Config: form.Config,
-	}
-
-	createdPlugin, err := plugin.Create(self.Client, apiName, generatePlugin)
+	createdPlugin, err := plugin.Create(self.Client, apiName, &params)
 	if err != nil {
 		c.HTML(http.StatusServiceUnavailable, "new-plugin.tmpl", gin.H{
 			"error":   true,

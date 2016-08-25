@@ -37,8 +37,16 @@
             <input type="checkbox" name="{{ $key }}" value="true" {{ if $field.Default }} checked {{ end }}>
             {{ $key }}
           </label>
+          {{ else if eq $field.Type "table" }}
+          {{ range $key2, $field := $field.Schema.Fields }}
+          {{ $key := printf "%s.%s" $key $key2 }}
+            <div class="form-group">
+              <label>{{ $key }}</label>
+              <input type="text" class="form-control" name="{{ $key }}" {{ if $field.Required }} required {{ end }}>
+            </div>
+          {{ end }}
           {{ else }}
-          <label>{{ $key }}</label>
+          <label>{{ $key }}:</label>
           <input type="text" class="form-control" name="{{ $key }}" value="{{ $field.Default }}" {{ if $field.Required }} required {{ end }}>
           {{ end }}
         </div>

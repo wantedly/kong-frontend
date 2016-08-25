@@ -32,10 +32,11 @@ type PluginSchema struct {
 }
 
 type PluginSchemaField struct {
-	Type     string      `json:"type"`
-	Required bool        `json:"required,omitempty"`
-	Func     string      `json:"func,omitempty"`
-	Default  interface{} `json:"default,omitempty"`
+	Type     string       `json:"type"`
+	Required bool         `json:"required,omitempty"`
+	Func     string       `json:"func,omitempty"`
+	Default  interface{}  `json:"default,omitempty"`
+	Schema   PluginSchema `json:"schema,omitempty"`
 }
 
 // Services

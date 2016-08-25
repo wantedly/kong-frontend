@@ -164,15 +164,21 @@ func (self *PluginController) Delete(c *gin.Context) {
 	return
 }
 
-func (self *PluginController) Create(c *gin.Context) {
-	apiName := c.Param("apiName")
-	pluginName, _ := c.GetPostForm("plugin_name")
-	consumerID, _ := c.GetPostForm("plugin_consumer_id")
-	schema, _ := plugin.Schema(self.Client, pluginName)
-	form := map[string]string{}
+func parsePluginSchema(c *gin.Context, schema *kong.PluginSchema, prefix string, form map[string]interface{}) {
 	for key, field := range schema.Fields {
-		value, ok := c.GetPostForm(key)
+		var (
+			value interface{}
+			ok bool
+		)
+		name := prefix + key
+		value, ok = c.GetPostForm(name)
 		if !ok {
+			if field.Type == "table" {
+				tmp := make(map[string]interface{})
+				parsePluginSchema(c, &field.Schema, name + ".", tmp)
+				form[key] = tmp
+				continue
+			}
 			if !field.Required {
 				continue
 			}
@@ -183,16 +189,25 @@ func (self *PluginController) Create(c *gin.Context) {
 					value = "false"
 				}
 			} else {
-				value = field.Default.(string)
+				value = field.Default
 			}
 		} else if value == "" {
 			if !field.Required {
 				continue
 			}
-			value = field.Default.(string)
+			value = field.Default
 		}
 		form[key] = value
 	}
+}
+
+func (self *PluginController) Create(c *gin.Context) {
+	apiName := c.Param("apiName")
+	pluginName, _ := c.GetPostForm("plugin_name")
+	consumerID, _ := c.GetPostForm("plugin_consumer_id")
+	schema, _ := plugin.Schema(self.Client, pluginName)
+	form := make(map[string]interface{})
+	parsePluginSchema(c, schema, "", form)
 	fmt.Printf("config: %#v\n", form)
 	params := kong.GeneratePluginParams{
 		Name:       pluginName,

@@ -1,0 +1,5 @@
+{{ define "new_plugin_field" }}
+{{ range $key, $field := . }}
+<div class="form-group">{{ $key }}</div>
+{{ end }}
+{{ end }}

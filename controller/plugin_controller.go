@@ -113,7 +113,7 @@ func (self *PluginController) New(c *gin.Context) {
 	return
 }
 
-func (self *PluginController) Config(c *gin.Context) {
+func (self *PluginController) SetConfig(c *gin.Context) {
 	apiName := c.Param("apiName")
 	consumers, err := oauth2.List(self.Client)
 	if err != nil {

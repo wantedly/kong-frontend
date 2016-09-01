@@ -1,5 +1,20 @@
 {{ define "new_plugin_field" }}
-{{ range $key, $field := . }}
-<div class="form-group">{{ $key }}</div>
-{{ end }}
+<div class="form-group">
+	{{ if eq .Type "table" }}
+	{{ range .Schema.Fields }}
+	{{ template "new_plugin_field" . }}
+	{{ end }}
+	{{ else if eq .Type "array" }}
+	<label>{{ .Name }}</label>
+	<input type="text" class="form-control" name="{{ .Name }}" value="{{ range $i, $e := .Default }}{{ if $i }},{{ end }}{{ $e }}{{ end }}" {{ if .Required }} required {{ end }}>
+	{{ else if eq .Type "boolean" }}
+	<label>
+		<input type="checkbox" name="{{ .Name }}" value="true" {{ if .Default }} checked {{ end }}>
+		{{ .Name }}
+	</label>
+	{{ else }}
+	<label>{{ .Name }}</label>
+	<input type="text" class="form-control" name="{{ .Name }}" value="{{ .Default }}" {{ if .Required }} required {{ end }}>
+	{{ end }}
+</div>
 {{ end }}

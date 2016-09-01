@@ -27,8 +27,8 @@ type EnabledPlugin struct {
 }
 
 type PluginSchema struct {
-	Fields     map[string]PluginSchemaField `json:"fields"`
-	NoConsumer bool                         `json:"no_consumer,omitempty"`
+	Fields     map[string]*PluginSchemaField `json:"fields"`
+	NoConsumer bool                          `json:"no_consumer,omitempty"`
 }
 
 type PluginSchemaField struct {
@@ -37,6 +37,7 @@ type PluginSchemaField struct {
 	Func     string       `json:"func,omitempty"`
 	Default  interface{}  `json:"default,omitempty"`
 	Schema   PluginSchema `json:"schema,omitempty"`
+	Name     string       `json:"name"`
 }
 
 // Services
@@ -67,9 +68,19 @@ func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, err
 	return plugins, resp, err
 }
 
+func (schema *PluginSchema) setPluginSchemaName(prefix string) {
+	for key, field := range schema.Fields {
+		field.Name = prefix + key
+		if field.Type == "table" {
+			field.Schema.setPluginSchemaName(field.Name + ".")
+		}
+	}
+}
+
 func (s *PluginService) GetPluginSchema(name string) (*PluginSchema, *http.Response, error) {
 	schema := new(PluginSchema)
 	resp, err := s.sling.New().Get(s.config.KongAdminURL + "plugins/schema/" + name).ReceiveSuccess(schema)
+	schema.setPluginSchemaName("")
 	return schema, resp, err
 }
 

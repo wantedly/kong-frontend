@@ -17,21 +17,21 @@ type PluginController struct {
 }
 
 type newPluginFormBody struct {
-	Name       string `form:"name" json:"name" binding:"required"`
+	Name string `form:"name" json:"name" binding:"required"`
 }
 
 func parsePluginSchema(c *gin.Context, schema *kong.PluginSchema, prefix string, form map[string]interface{}) {
 	for key, field := range schema.Fields {
 		var (
 			value interface{}
-			ok bool
+			ok    bool
 		)
 		name := prefix + key
 		value, ok = c.GetPostForm(name)
 		if !ok {
 			if field.Type == "table" {
 				tmp := make(map[string]interface{})
-				parsePluginSchema(c, &field.Schema, name + ".", tmp)
+				parsePluginSchema(c, &field.Schema, name+".", tmp)
 				form[key] = tmp
 				continue
 			}
@@ -208,7 +208,7 @@ func (self *PluginController) Create(c *gin.Context) {
 	schema, _ := plugin.Schema(self.Client, pluginName)
 	form := make(map[string]interface{})
 	parsePluginSchema(c, schema, "", form)
-	fmt.Printf("config: %#v\n", form)
+	fmt.Fprintf(os.Stderr, "config: %+v\n", form)
 	params := kong.GeneratePluginParams{
 		Name:       pluginName,
 		ConsumerID: consumerID,

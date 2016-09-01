@@ -20,6 +20,43 @@ type newPluginFormBody struct {
 	Name       string `form:"name" json:"name" binding:"required"`
 }
 
+func parsePluginSchema(c *gin.Context, schema *kong.PluginSchema, prefix string, form map[string]interface{}) {
+	for key, field := range schema.Fields {
+		var (
+			value interface{}
+			ok bool
+		)
+		name := prefix + key
+		value, ok = c.GetPostForm(name)
+		if !ok {
+			if field.Type == "table" {
+				tmp := make(map[string]interface{})
+				parsePluginSchema(c, &field.Schema, name + ".", tmp)
+				form[key] = tmp
+				continue
+			}
+			if !field.Required {
+				continue
+			}
+			if field.Type == "boolean" {
+				if field.Default == true {
+					value = "true"
+				} else {
+					value = "false"
+				}
+			} else {
+				value = field.Default
+			}
+		} else if value == "" {
+			if !field.Required {
+				continue
+			}
+			value = field.Default
+		}
+		form[key] = value
+	}
+}
+
 func NewPluginController(client *kong.Client) *PluginController {
 	return &PluginController{client}
 }
@@ -162,43 +199,6 @@ func (self *PluginController) Delete(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, "/apis/"+apiName+"/plugins")
 
 	return
-}
-
-func parsePluginSchema(c *gin.Context, schema *kong.PluginSchema, prefix string, form map[string]interface{}) {
-	for key, field := range schema.Fields {
-		var (
-			value interface{}
-			ok bool
-		)
-		name := prefix + key
-		value, ok = c.GetPostForm(name)
-		if !ok {
-			if field.Type == "table" {
-				tmp := make(map[string]interface{})
-				parsePluginSchema(c, &field.Schema, name + ".", tmp)
-				form[key] = tmp
-				continue
-			}
-			if !field.Required {
-				continue
-			}
-			if field.Type == "boolean" {
-				if field.Default == true {
-					value = "true"
-				} else {
-					value = "false"
-				}
-			} else {
-				value = field.Default
-			}
-		} else if value == "" {
-			if !field.Required {
-				continue
-			}
-			value = field.Default
-		}
-		form[key] = value
-	}
 }
 
 func (self *PluginController) Create(c *gin.Context) {

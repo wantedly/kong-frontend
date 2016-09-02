@@ -66,7 +66,7 @@ func Create(self *kong.Client, generateAPI *kong.API, generatePlugin *kong.Plugi
 		return nil, nil, err
 	}
 	generatePlugin.ID = api.ID
-	plugin, _, err := self.PluginService.Create(generatePlugin, generateAPI.Name)
+	plugin, _, err := self.PluginService.CreateOAuth(generatePlugin, generateAPI.Name)
 	if err != nil {
 		return nil, nil, err
 	}

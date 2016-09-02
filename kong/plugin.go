@@ -14,28 +14,30 @@ type Plugins struct {
 }
 
 type Plugin struct {
-	APIID     string       `json:"api_id,omitempty"`
-	Config    PluginConfig `json:"config,omitempty"`
-	CreatedAt int          `json:"created_at,omitempty"`
-	Enabled   bool         `json:"enabled,omitempty"`
-	ID        string       `json:"id,omitempty"`
-	Name      string       `json:"name,omitempty"`
-}
-
-type PluginConfig struct {
-	AcceptHTTPIfAlreadyTerminated bool   `json:"accept_http_if_already_terminated,omitempty"`
-	EnableAuthorizationCode       bool   `json:"enable_authorization_code,omitempty"`
-	EnableClientCredentials       bool   `json:"enable_client_credentials,omitempty"`
-	EnableImplicitGrant           bool   `json:"enable_implicit_grant,omitempty"`
-	EnablePasswordGrant           bool   `json:"enable_password_grant,omitempty"`
-	HideCredentials               bool   `json:"hide_credentials,omitempty"`
-	MandatoryScope                bool   `json:"mandatory_scope,omitempty"`
-	ProvisionKey                  string `json:"provision_key,omitempty"`
-	TokenExpiration               int    `json:"token_expiration,omitempty"`
+	APIID     string      `json:"api_id,omitempty"`
+	Config    interface{} `json:"config,omitempty"`
+	CreatedAt int         `json:"created_at,omitempty"`
+	Enabled   bool        `json:"enabled,omitempty"`
+	ID        string      `json:"id,omitempty"`
+	Name      string      `json:"name,omitempty"`
 }
 
 type EnabledPlugin struct {
 	EnabledPlugins []string `json:"enabled_plugins"`
+}
+
+type PluginSchema struct {
+	Fields     map[string]*PluginSchemaField `json:"fields"`
+	NoConsumer bool                          `json:"no_consumer,omitempty"`
+}
+
+type PluginSchemaField struct {
+	Type     string       `json:"type"`
+	Required bool         `json:"required,omitempty"`
+	Func     string       `json:"func,omitempty"`
+	Default  interface{}  `json:"default,omitempty"`
+	Schema   PluginSchema `json:"schema,omitempty"`
+	Name     string       `json:"name"`
 }
 
 // Services
@@ -44,6 +46,12 @@ type EnabledPlugin struct {
 type PluginService struct {
 	sling  *sling.Sling
 	config *config.KongConfiguration
+}
+
+type GeneratePluginParams struct {
+	Name       string      `form:"name" json:"name" binding:"required"`
+	ConsumerID string      `form:"consumer_id" json:"consumer_id,omitempty" binding:"omitempty"`
+	Config     interface{} `form:"config" json:"config" binding:"omitempty"`
 }
 
 // NewPluginService returns a new PluginService.
@@ -60,7 +68,29 @@ func (s *PluginService) GetEnabledPlugins() (*EnabledPlugin, *http.Response, err
 	return plugins, resp, err
 }
 
-func (s *PluginService) Create(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
+func (schema *PluginSchema) setPluginSchemaName(prefix string) {
+	for key, field := range schema.Fields {
+		field.Name = prefix + key
+		if field.Type == "table" {
+			field.Schema.setPluginSchemaName(field.Name + ".")
+		}
+	}
+}
+
+func (s *PluginService) GetPluginSchema(name string) (*PluginSchema, *http.Response, error) {
+	schema := new(PluginSchema)
+	resp, err := s.sling.New().Get(s.config.KongAdminURL + "plugins/schema/" + name).ReceiveSuccess(schema)
+	schema.setPluginSchemaName("")
+	return schema, resp, err
+}
+
+func (s *PluginService) CreateOAuth(params *Plugin, apiName string) (*Plugin, *http.Response, error) {
+	plugin := new(Plugin)
+	resp, err := s.sling.New().Post(s.config.KongAdminURL + "apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
+	return plugin, resp, err
+}
+
+func (s *PluginService) Create(params *GeneratePluginParams, apiName string) (*Plugin, *http.Response, error) {
 	plugin := new(Plugin)
 	resp, err := s.sling.New().Post(s.config.KongAdminURL + "apis/" + apiName + "/plugins").BodyJSON(params).ReceiveSuccess(plugin)
 	return plugin, resp, err

@@ -21,11 +21,11 @@ type newPluginFormBody struct {
 }
 
 func parsePluginSchema(c *gin.Context, schema *kong.PluginSchema, prefix string, form map[string]interface{}) {
+	var (
+		value interface{}
+		ok    bool
+	)
 	for key, field := range schema.Fields {
-		var (
-			value interface{}
-			ok    bool
-		)
 		name := prefix + key
 		value, ok = c.GetPostForm(name)
 		if !ok {

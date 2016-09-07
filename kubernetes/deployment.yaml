@@ -1,11 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: blue
+  name: oauth-token-generator
   labels:
     app: kong
     name: oauth-token-generator
-    color: blue
 spec:
   minReadySeconds: 30
   strategy:
@@ -13,20 +12,19 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: blue
+      name: oauth-token-generator
       labels:
         app: kong
         name: oauth-token-generator
-        color: blue
     spec:
       imagePullSecrets:
         - name: wantedlybotkey
       containers:
       - image: quay.io/wantedly/kong-oauth-token-generator:latest
-        name: blue
+        name: oauth-token-generator
         ports:
-          - containerPort: 3000
-            name: rails
+          - containerPort: 8080
+            name: go
         env:
           - name: KONG_HOST
             value: kong-internal

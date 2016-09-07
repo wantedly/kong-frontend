@@ -134,6 +134,7 @@ func (self *PluginController) New(c *gin.Context) {
 	apiName := c.Param("apiName")
 	plugins, err := plugin.EnabledPlugins(self.Client)
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "Err: get enabled plugins: %+v\n", err)
 		c.HTML(http.StatusBadRequest, "new-plugin.tmpl", gin.H{
 			"error":   true,
 			"message": "Failed to get enabled plugin list.",

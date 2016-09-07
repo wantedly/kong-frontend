@@ -18,8 +18,10 @@
         <div class="form-group">
           <label>NAME:</label>
           <select name="name" class="form-control">
-            {{ range .plugins }}
-            <option value="{{ . }}">{{ . }}</option>
+            {{ range $name, $enabled := .plugins }}
+            {{ if $enabled }}
+            <option value="{{ $name }}">{{ $name }}</option>
+            {{ end }}
             {{ end }}
           </select>
         </div>

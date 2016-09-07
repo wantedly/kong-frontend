@@ -1,7 +1,7 @@
 package oauth2
 
 import (
-	"github.com/wantedly/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-frontend/kong"
 )
 
 func List(self *kong.Client) (*kong.Consumers, error) {

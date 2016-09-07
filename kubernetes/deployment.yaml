@@ -1,11 +1,11 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: oauth-token-generator
+  name: kong-frontend
   namespace: kong
   labels:
     app: kong
-    name: oauth-token-generator
+    name: kong-frontend
 spec:
   minReadySeconds: 30
   strategy:
@@ -13,16 +13,16 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: oauth-token-generator
+      name: kong-frontend
       labels:
         app: kong
-        name: oauth-token-generator
+        name: kong-frontend
     spec:
       imagePullSecrets:
         - name: wantedlybotkey
       containers:
-      - image: quay.io/wantedly/kong-oauth-token-generator:latest
-        name: oauth-token-generator
+      - image: quay.io/wantedly/kong-frontend:latest
+        name: kong-frontend
         ports:
           - containerPort: 8080
             name: go

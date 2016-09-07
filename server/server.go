@@ -2,9 +2,9 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/wantedly/kong-oauth-token-generator/config"
-	"github.com/wantedly/kong-oauth-token-generator/controller"
-	"github.com/wantedly/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-frontend/config"
+	"github.com/wantedly/kong-frontend/controller"
+	"github.com/wantedly/kong-frontend/kong"
 )
 
 func Run(config *config.KongConfiguration) {

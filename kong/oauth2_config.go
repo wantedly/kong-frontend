@@ -14,13 +14,13 @@ type OAuth2ConfigList struct {
 }
 
 type OAuth2Config struct {
-	ClientID     string `json:"client_id,omitempty"`
-	ClientSecret string `json:"client_secret,omitempty"`
-	ConsumerID   string `json:"consumer_id,omitempty"`
-	CreatedAt    int    `json:"created_at,omitempty"`
-	ID           string `json:"id,omitempty"`
-	Name         string `json:"name,omitempty"`
-	RedirectURI  string `json:"redirect_uri,omitempty"`
+	ClientID     string   `json:"client_id,omitempty"`
+	ClientSecret string   `json:"client_secret,omitempty"`
+	ConsumerID   string   `json:"consumer_id,omitempty"`
+	CreatedAt    int      `json:"created_at,omitempty"`
+	ID           string   `json:"id,omitempty"`
+	Name         string   `json:"name,omitempty"`
+	RedirectURI  []string `json:"redirect_uri,omitempty"`
 }
 
 // Services

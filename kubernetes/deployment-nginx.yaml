@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: nginx-proxy
+  namespace: kong
   labels:
     app: nginx-proxy
 spec:

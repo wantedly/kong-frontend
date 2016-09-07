@@ -6,10 +6,10 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/wantedly/kong-oauth-token-generator/kong"
-	"github.com/wantedly/kong-oauth-token-generator/model/api"
-	"github.com/wantedly/kong-oauth-token-generator/model/oauth2"
-	"github.com/wantedly/kong-oauth-token-generator/model/plugin"
+	"github.com/wantedly/kong-frontend/kong"
+	"github.com/wantedly/kong-frontend/model/api"
+	"github.com/wantedly/kong-frontend/model/oauth2"
+	"github.com/wantedly/kong-frontend/model/plugin"
 )
 
 type PluginController struct {

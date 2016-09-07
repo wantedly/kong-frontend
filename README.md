@@ -1,4 +1,4 @@
-## kong-oauth-token-generator
+## kong-frontend
 
 ## Usage
 
@@ -16,4 +16,4 @@ Go 1.5 or higher is required.
 ``` bash
 $ make deps
 $ make build
-$ bin/kong-oauth-token-generator
+$ bin/kong-frontend

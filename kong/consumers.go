@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/dghubble/sling"
-	"github.com/wantedly/kong-oauth-token-generator/config"
+	"github.com/wantedly/kong-frontend/config"
 )
 
 type Consumers struct {

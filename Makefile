@@ -4,7 +4,7 @@ BUILDTIME := $(shell date '+%Y/%m/%d %H:%M:%S %Z')
 GOVERSION := $(subst go version ,,$(shell go version))
 
 BINARYDIR := bin
-BINARY := kong-oauth-token-generator
+BINARY := kong-frontend
 LINUX_AMD64_SUFFIX := _linux-amd64
 
 SOURCEDIR := .
@@ -15,7 +15,7 @@ LDFLAGS := -ldflags="-w -X \"main.Version=$(VERSION)\" -X \"main.Revision=$(REVI
 GLIDE := glide
 GLIDE_VERSION := 0.10.2
 
-DOCKER_IMAGE_NAME := wantedly/kong-oauth-token-generator
+DOCKER_IMAGE_NAME := wantedly/kong-frontend
 DOCKER_IMAGE_TAG := $(VERSION)
 DOCKER_IMAGE := $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
 

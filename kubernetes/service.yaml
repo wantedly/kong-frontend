@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: oauth-token-generator
+  name: kong-frontend
   namespace: kong
   labels:
     app: kong
-    name: oauth-token-generator
+    name: kong-frontend
 spec:
   type: LoadBalancer
   ports:
-    - name: kong-oauth-token-generator
+    - name: kong-frontend
       port: 443
       targetPort: 8080
   selector:
     app: kong
-    name: oauth-token-generator
+    name: kong-frontend

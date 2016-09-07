@@ -7,10 +7,10 @@ metadata:
     app: kong
     name: oauth-token-generator
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: kong-oauth-token-generator
-      port: 8080
+      port: 443
       targetPort: 8080
   selector:
     app: kong

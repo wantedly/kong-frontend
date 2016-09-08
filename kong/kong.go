@@ -14,6 +14,7 @@ type Client struct {
 	PluginService          *PluginService
 	OAuth2ConfigService    *OAuth2ConfigService
 	AssigneesOAuth2Service *AssigneesOAuth2Service
+	BasicAuthService       *BasicAuthService
 	// other service endpoints...
 }
 
@@ -25,6 +26,7 @@ func NewClient(httpClient *http.Client, config *config.KongConfiguration) *Clien
 		PluginService:          NewPluginService(httpClient, config),
 		OAuth2ConfigService:    NewOAuth2ConfigService(httpClient, config),
 		AssigneesOAuth2Service: NewAssigneesOAuth2Service(httpClient, config),
+		BasicAuthService:       NewBasicAuthService(httpClient, config),
 	}
 }
 

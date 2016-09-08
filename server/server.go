@@ -52,8 +52,8 @@ func Run(config *config.KongConfiguration) {
 	r.POST("/consumers/:consumerID/basic-auth", basicAuthController.Create)
 	r.GET("/consumers/:consumerID/basic-auth/:credentialID", basicAuthController.Get)
 	r.POST("/consumers/:consumerID/basic-auth/:credentialID", basicAuthController.Update)
-	r.POST("/consumers/:consumerID/basic-auth/delete", basicAuthController.Delete)
-	r.GET("/consumers/:consumerID/basic-auth/new", basicAuthController.New)
+	r.POST("/consumers/:consumerID/basic-auth/:credentialID/delete", basicAuthController.Delete)
+	r.GET("/consumers/:consumerID/new-basic-auth", basicAuthController.New)
 
 	r.Run()
 }

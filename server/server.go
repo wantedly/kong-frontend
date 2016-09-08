@@ -18,6 +18,7 @@ func Run(config *config.KongConfiguration) {
 	oauth2Controller := controller.NewOAuth2Controller(client)
 	pluginController := controller.NewPluginController(client)
 	consumerController := controller.NewConsumerController(client)
+	basicAuthController := controller.NewBasicAuthController(client)
 
 	r.GET("/", apiController.Index)
 

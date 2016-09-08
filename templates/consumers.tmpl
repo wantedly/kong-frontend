@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Consumers</title>
+    <title>Consumer</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="/assets/octicons.css">
@@ -9,7 +9,7 @@
   <body>
     {{ template "navbar" . }}
     <div class="container">
-      <h1>Consumers
+      <h1>Consumer
         <a class="btn btn-success btn-lg" href="/new-consumer" role="button">New</a>
       </h1>
       {{ if .error }}
@@ -22,7 +22,7 @@
       <div class="panel panel-default">
 
         <!-- Default panel contents -->
-        <div class="panel-heading">Consumers Total: {{ .total }}
+        <div class="panel-heading">Consumer Total: {{ .total }}
         </div>
         <!-- Table -->
         <table class="table">

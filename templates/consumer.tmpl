@@ -19,13 +19,14 @@
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         Error: {{ .error }}
       </div>
-      {{ else }}
+      {{ end }}
       {{ if .success }}
       <div class="alert alert-success">
         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
         Success: {{ .success }}
       </div>
       {{ end }}
+      {{ if .consumer }}
       <form action="/consumers/{{ .consumer.ID }}" method="POST">
         <div class="form-group">
           <label>ID:</label>

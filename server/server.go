@@ -17,6 +17,7 @@ func Run(config *config.KongConfiguration) {
 	apiController := controller.NewAPIController(client)
 	oauth2Controller := controller.NewOAuth2Controller(client)
 	pluginController := controller.NewPluginController(client)
+	consumerController := controller.NewConsumerController(client)
 
 	r.GET("/", apiController.Index)
 
@@ -25,6 +26,13 @@ func Run(config *config.KongConfiguration) {
 	r.GET("/apis/:apiName", apiController.Get)
 	r.POST("/apis/:apiName/delete", apiController.Delete)
 	r.GET("/new-api", apiController.New)
+
+	r.GET("/consumers", consumerController.Index)
+	r.POST("/consumers", consumerController.Create)
+	r.GET("/consumers/:consumerID", consumerController.Get)
+	r.POST("/consumers/:consumerID", consumerController.Update)
+	r.POST("/consumers/:consumerID/delete", consumerController.Delete)
+	r.GET("/new-consumer", consumerController.New)
 
 	r.GET("/oauth2s", oauth2Controller.Index)
 	r.POST("/oauth2s", oauth2Controller.Create)

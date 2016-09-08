@@ -48,7 +48,7 @@ func Run(config *config.KongConfiguration) {
 	r.GET("/apis/:apiName/new-plugin", pluginController.New)
 	r.POST("/apis/:apiName/new-plugin", pluginController.SetConfig)
 
-	r.GET("/consumers/consumerID/basic-auth", basicAuthController.Index)
+	r.GET("/consumers/:consumerID/basic-auth", basicAuthController.Index)
 	r.POST("/consumers/:consumerID/basic-auth", basicAuthController.Create)
 	r.GET("/consumers/:consumerID/basic-auth/:credentialID", basicAuthController.Get)
 	r.POST("/consumers/:consumerID/basic-auth/:credentialID", basicAuthController.Update)

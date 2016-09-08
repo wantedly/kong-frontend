@@ -4,7 +4,7 @@ import (
 	_ "fmt"
 	_ "os"
 
-	"github.com/wantedly/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-frontend/kong"
 )
 
 type Plugin struct {

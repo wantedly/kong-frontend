@@ -4,7 +4,7 @@ import (
 	_ "fmt"
 	"net/http"
 
-	"github.com/wantedly/kong-oauth-token-generator/config"
+	"github.com/wantedly/kong-frontend/config"
 )
 
 // Client is kong client

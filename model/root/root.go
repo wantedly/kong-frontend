@@ -3,7 +3,7 @@ package root
 import (
 	_ "fmt"
 
-	"github.com/wantedly/kong-oauth-token-generator/kong"
+	"github.com/wantedly/kong-frontend/kong"
 )
 
 func List(self *kong.Client) (*kong.APIs, *kong.AssigneesOAuth2List, error) {

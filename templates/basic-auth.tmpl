@@ -4,7 +4,7 @@
     {{ if .error }}
     <title>{{ .error }}</title>
     {{ else }}
-    <title>{{ .consumer.Username }}</title>
+    <title>{{ .credential.Username }}</title>
     {{ end }}
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -13,7 +13,7 @@
   <body>
     {{ template "navbar" . }}
     <div class="container">
-      <h1>{{ .consumer.Username }}</h1>
+      <h1>{{ .credential.Username }}</h1>
       {{ if .error }}
       <div class="alert alert-danger">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -26,30 +26,30 @@
         Success: {{ .success }}
       </div>
       {{ end }}
-      {{ if .consumer }}
-      <form action="/consumers/{{ .consumer.ID }}" method="POST">
+      {{ if .credential }}
+      <form action="/consumers/{{ .consumerID }}/basic-auth/{{ .credential.ID }}" method="POST">
         <div class="form-group">
           <label>ID:</label>
-          <input type="text" class="form-control" value="{{ .consumer.ID }}" readonly="readonly">
+          <input type="text" class="form-control" value="{{ .credential.ID }}" readonly="readonly">
+        </div>
+        <div class="form-group">
+          <label>Consumer ID:</label>
+          <input type="text" class="form-control" value="{{ .credential.ConsumerID }}" readonly="readonly">
         </div>
         <div class="form-group">
           <label for="form-username">Username:</label>
-          <input type="text" id="form-username" class="form-control" name="username" value="{{ .consumer.Username }}" required="required">
+          <input type="text" id="form-username" class="form-control" name="username" value="{{ .credential.Username }}" required="required">
         </div>
         <div class="form-group">
-          <label for="form-custom-id">Custom ID:</label>
-          <input type="text" id="form-custom-id" class="form-control" name="custom_id" value="{{ .consumer.CustomID }}">
+          <label for="form-password">Password:</label>
+          <input type="password" id="form-password" class="form-control" name="password" placeholder="{{ .credential.Password }}">
         </div>
         <div class="form-group">
           <label>Created At:</label>
-          <input type="text" class="form-control" value="{{ .consumer.CreatedAt }}" readonly="readonly">
+          <input type="text" class="form-control" value="{{ .credential.CreatedAt }}" readonly="readonly">
         </div>
         <button type="submit" class="btn btn-primary btn-lg">Update</button>
       </form>
-      <div>
-        <h2>Plugins</h2>
-        <a href="/consumers/{{ .consumer.ID }}/basic-auth" class="btn btn-default" roke="button">Basic Authentication</a>
-      </div>
       {{ end }}
     </div>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>

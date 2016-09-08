@@ -18,6 +18,7 @@ func Run(config *config.KongConfiguration) {
 	oauth2Controller := controller.NewOAuth2Controller(client)
 	pluginController := controller.NewPluginController(client)
 	consumerController := controller.NewConsumerController(client)
+	basicAuthController := controller.NewBasicAuthController(client)
 
 	r.GET("/", apiController.Index)
 
@@ -46,6 +47,13 @@ func Run(config *config.KongConfiguration) {
 	r.POST("/apis/:apiName/plugins/:pluginID/delete", pluginController.Delete)
 	r.GET("/apis/:apiName/new-plugin", pluginController.New)
 	r.POST("/apis/:apiName/new-plugin", pluginController.SetConfig)
+
+	r.GET("/consumers/:consumerID/basic-auth", basicAuthController.Index)
+	r.POST("/consumers/:consumerID/basic-auth", basicAuthController.Create)
+	r.GET("/consumers/:consumerID/basic-auth/:credentialID", basicAuthController.Get)
+	r.POST("/consumers/:consumerID/basic-auth/:credentialID", basicAuthController.Update)
+	r.POST("/consumers/:consumerID/basic-auth/:credentialID/delete", basicAuthController.Delete)
+	r.GET("/consumers/:consumerID/new-basic-auth", basicAuthController.New)
 
 	r.Run()
 }

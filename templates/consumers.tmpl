@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Consumers</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/octicons.css">
+  </head>
+  <body>
+    {{ template "navbar" . }}
+    <div class="container">
+      <h1>Consumers
+        <a class="btn btn-success btn-lg" href="/new-consumer" role="button">New</a>
+      </h1>
+      {{ if .error }}
+      <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Error: {{ .error }}
+      </div>
+      {{ end }}
+      {{ if .consumers }}
+      <div class="panel panel-default">
+
+        <!-- Default panel contents -->
+        <div class="panel-heading">Consumers Total: {{ .total }}
+        </div>
+        <!-- Table -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Custom ID</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ range .consumers }}
+            <tr>
+              <td><a href="/consumers/{{ .ID }}">{{ .ID }}</a></td>
+              <td>{{ .Username }}</td>
+              <td>{{ .CustomID }}</td>
+              <td>
+                <form method="POST" action="/consumers/{{ .ID }}/delete">
+                  <button type="submit" class="btn btn-danger" onclick='return confirm("Delete {{ .Username }} ?");'>
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+      {{ end }}
+    </div>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </body>
+</html>

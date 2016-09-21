@@ -1,5 +1,16 @@
 version: '2'
 services:
+  kong-frontend:
+    image: quay.io/wantedly/kong-frontend
+    depends_on:
+      - kong
+    environment:
+      - KONG_HOST=kong
+      - KONG_PORT=8001
+    ports:
+      - 8080
+    links:
+      - kong
   kong-database:
     image: postgres:9.4
     environment:
